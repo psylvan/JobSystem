@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface StudentInfoService extends IService<StudentInfo> {
 
+    public int testAdvice();
 }

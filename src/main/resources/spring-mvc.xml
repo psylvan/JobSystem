@@ -15,6 +15,7 @@
 
 <!--    注解驱动-->
     <mvc:annotation-driven>
+<!--        JSON 乱码处理-->
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">
                 <property name="supportedMediaTypes">

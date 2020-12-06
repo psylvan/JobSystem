@@ -2,6 +2,11 @@ package pojo;
 
 import java.util.Date;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,6 +24,7 @@ public class ResumeInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(type = IdType.ASSIGN_ID)
     private String resumeId;
 
     private String studentId;
@@ -27,6 +33,7 @@ public class ResumeInfo implements Serializable {
 
     private Integer resunmeStatus;
 
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
     private String url;

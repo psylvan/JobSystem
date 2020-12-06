@@ -1,4 +1,4 @@
-package util;
+package util.json;
 
 public enum ResultCode {
     SUCCESS(200),//成功

@@ -22,9 +22,14 @@
 <!--    sqlSessionFactory   使用Mybatis-plus的sqlSessionFactory-->
     <bean class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean" id="sqlSessionFactory">
         <property name="dataSource" ref="dataSource"/>
+        <property name="globalConfig" ref="globalConfig"></property>
+        <property name="configuration" ref="configuration"></property>
     </bean>
 
     <!--mybatis-plus配置-->
+    <bean class="com.baomidou.mybatisplus.core.config.GlobalConfig" id="globalConfig">
+        <property name="metaObjectHandler" ref="handler"></property>
+    </bean>
     <bean class="com.baomidou.mybatisplus.core.MybatisConfiguration" id="configuration">
         <!-- 配置日志-->
         <property name="logImpl" value="org.apache.ibatis.logging.stdout.StdOutImpl"/>

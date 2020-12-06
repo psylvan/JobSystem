@@ -7,11 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import pojo.StudentInfo;
 import service.StudentInfoService;
-import util.RestResult;
-import util.ResultCode;
+import util.json.RestResult;
+import util.json.ResultCode;
 
 import java.util.List;
 
@@ -23,14 +22,16 @@ import java.util.List;
  * @author 560寝室
  * @since 2020-12-06
  */
-@RestController
+@Controller
 public class StudentInfoController {
     @Autowired
     private StudentInfoService studentInfoService;
 
-    @RequestMapping("/getInfo")
+    @RequestMapping("/getInfo") //请求路径（ajax接口）
+    @ResponseBody   //直接返回字符串  不经过视图解析
     public String getStudentList(){
         List<StudentInfo> list = studentInfoService.list();
+
         return new RestResult()
                 .setCode(ResultCode.SUCCESS)
                 .setMessage("成功")

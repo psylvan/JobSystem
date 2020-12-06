@@ -1,4 +1,4 @@
-package util;
+package util.json;
 
 import com.alibaba.fastjson.JSON;
 
