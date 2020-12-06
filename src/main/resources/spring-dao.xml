@@ -32,6 +32,6 @@
 
 <!--    配置dao接口扫面包 动态的实现了DAO接口可以注入到spring容器中-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="dao"/>
+        <property name="basePackage" value="mapper"/>
     </bean>
 </beans>

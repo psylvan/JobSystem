@@ -5,8 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ResponseBody;
+import pojo.StudentInfo;
 import service.StudentInfoService;
-import service.impl.StudentInfoServiceImpl;
+import util.RestResult;
+import util.ResultCode;
+
+import java.util.List;
 
 /**
  * <p>
@@ -21,6 +26,15 @@ public class StudentInfoController {
     @Autowired
     private StudentInfoService studentInfoService;
 
-
+    @RequestMapping("/getInfo")
+    @ResponseBody
+    public String getStudentList(){
+        List<StudentInfo> list = studentInfoService.list();
+        return new RestResult()
+                .setCode(ResultCode.SUCCESS)
+                .setMessage("成功")
+                .setData(list)
+                .toString();
+    }
 }
 

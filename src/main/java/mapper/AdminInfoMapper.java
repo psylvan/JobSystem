@@ -1,5 +1,6 @@
 package mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import pojo.AdminInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
