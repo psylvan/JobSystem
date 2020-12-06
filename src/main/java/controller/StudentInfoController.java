@@ -1,11 +1,13 @@
 package controller;
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import pojo.StudentInfo;
 import service.StudentInfoService;
 import util.RestResult;
@@ -21,13 +23,12 @@ import java.util.List;
  * @author 560寝室
  * @since 2020-12-06
  */
-@Controller
+@RestController
 public class StudentInfoController {
     @Autowired
     private StudentInfoService studentInfoService;
 
     @RequestMapping("/getInfo")
-    @ResponseBody
     public String getStudentList(){
         List<StudentInfo> list = studentInfoService.list();
         return new RestResult()
