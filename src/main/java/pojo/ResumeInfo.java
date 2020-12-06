@@ -31,7 +31,7 @@ public class ResumeInfo implements Serializable {
 
     private String resumeName;
 
-    private Integer resunmeStatus;
+    private Integer resumeStatus;
 
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;

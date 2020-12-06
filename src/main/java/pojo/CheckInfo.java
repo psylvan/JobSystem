@@ -30,7 +30,7 @@ public class CheckInfo implements Serializable {
 
     private Integer checkStatus;
 
-
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
 

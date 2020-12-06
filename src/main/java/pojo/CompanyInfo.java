@@ -30,7 +30,6 @@ public class CompanyInfo implements Serializable {
 
     private String companyProperty;
 
-    private byte[] companyLocation;
-
+    private String companyLocation;
 
 }
