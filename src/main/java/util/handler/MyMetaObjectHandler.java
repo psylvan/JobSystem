@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Slf4j
 public class MyMetaObjectHandler implements MetaObjectHandler {
 
     @Override

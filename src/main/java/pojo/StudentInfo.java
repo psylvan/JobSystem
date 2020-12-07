@@ -21,6 +21,9 @@ public class StudentInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private static final int MAN = 1;
+    private static final int WOMAN = 0;
+
     @TableId(type = IdType.ASSIGN_UUID)
     private String studentId;
 

@@ -24,6 +24,9 @@ public class ResumeInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private static final int DELIVERD = 1;
+    private static final int UNDELIVERED = 0;
+
     @TableId(type = IdType.ASSIGN_ID)
     private String resumeId;
 
