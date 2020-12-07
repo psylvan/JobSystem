@@ -20,8 +20,6 @@ import lombok.EqualsAndHashCode;
 public class JobInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public static final int DELETED = -1;
-    public static final int USED = 1;
 
     @TableId(type = IdType.ASSIGN_ID)
     private String jobId;

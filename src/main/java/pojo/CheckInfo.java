@@ -22,6 +22,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class CheckInfo implements Serializable {
 
+    public static final int PASSED = 1;
+    public static final int CHECKING = 0;
     private static final long serialVersionUID = 1L;
     @TableId(type = IdType.ASSIGN_ID)
     private String checkId;

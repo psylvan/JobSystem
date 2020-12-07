@@ -31,7 +31,7 @@ public class DeliverRecordInfo implements Serializable {
     @TableId(type = IdType.ASSIGN_ID)
     private String deliverId;
 
-    private String jogId;
+    private String jobId;
 
     private String resumeId;
 
