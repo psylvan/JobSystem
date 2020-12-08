@@ -2,4 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.ResumeInfoMapper">
 
+    <select id="getResumeInfoById" resultMap="resume" parameterType="string">
+        select resume_id , r.student_id student_id,student_name
+         from resume_info r,student_info s
+        where r.student_id = s.student_id and r.student_id = #{id};
+    </select>
+
+    <resultMap id="resume" type="pojo.DeliverRecordInfo">
+        <id property="resumeId" column="resume_id"/>
+        <association property="studentInfo" javaType="pojo.StudentInfo">
+            <result property="studentId" column="student_id"/>
+            <result property="studentName" column="student_name"/>
+        </association>
+    </resultMap>
+
+
 </mapper>

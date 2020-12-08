@@ -23,7 +23,8 @@
     <bean class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean" id="sqlSessionFactory">
         <property name="dataSource" ref="dataSource"/>
         <property name="globalConfig" ref="globalConfig"></property>
-        <property name="configuration" ref="configuration"></property>
+<!--        <property name="configuration" ref="configuration"></property>-->
+        <property name="configLocation" value="classpath:mybaits-config.xml"/>
     </bean>
 
     <!--mybatis-plus配置-->
@@ -37,6 +38,7 @@
 
 <!--    配置dao接口扫面包 动态的实现了DAO接口可以注入到spring容器中-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
         <property name="basePackage" value="mapper"/>
     </bean>
 </beans>

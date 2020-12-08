@@ -44,6 +44,12 @@ public class ResumeInfoServiceImpl extends ServiceImpl<ResumeInfoMapper, ResumeI
     //根据投递记录查询
     @Override
     public String getResume(String studentName,String companyId) {
+        return null;
+    }
+
+    public void getResumeById(){
+        String id = "2220172361";
+        System.out.println(resumeInfoMapper.getResumeInfoById(id));
 
     }
 }

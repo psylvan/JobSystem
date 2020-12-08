@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ResumeInfoService extends IService<ResumeInfo> {
     public String getResume(String studentName,String companyId);
+    public void getResumeById();
 }
