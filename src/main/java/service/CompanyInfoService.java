@@ -1,7 +1,9 @@
 package service;
 
+import pojo.CheckInfo;
 import pojo.CompanyInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import pojo.DeliverRecordInfo;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface CompanyInfoService extends IService<CompanyInfo> {
 
+    public String register(CompanyInfo companyInfo, CheckInfo checkInfo);
 }

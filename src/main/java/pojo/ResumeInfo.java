@@ -2,6 +2,7 @@ package pojo;
 
 import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -23,14 +24,16 @@ import lombok.EqualsAndHashCode;
 public class ResumeInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    public static final int DELETED = -1;
+    public static final int USED = 1;
 
-    private static final int DELIVERD = 1;
-    private static final int UNDELIVERED = 0;
 
     @TableId(type = IdType.ASSIGN_ID)
     private String resumeId;
 
     private String studentId;
+    @TableField(exist = false)
+    private StudentInfo studentInfo;
 
     private String resumeName;
 
@@ -41,5 +44,6 @@ public class ResumeInfo implements Serializable {
 
     private String url;
 
-
+    @TableField(exist = false)
+    private List<DeliverRecordInfo> deliverRecordInfos;
 }

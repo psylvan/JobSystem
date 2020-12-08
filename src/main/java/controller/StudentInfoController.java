@@ -2,17 +2,29 @@ package controller;
 
 
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.api.R;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.HttpRequest;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import pojo.DeliverRecordInfo;
+import pojo.JobInfo;
+import pojo.ResumeInfo;
 import pojo.StudentInfo;
-import service.StudentInfoService;
+import service.*;
 import util.json.RestResult;
 import util.json.ResultCode;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.util.*;
 
 /**
  * <p>
@@ -26,6 +38,12 @@ import java.util.List;
 public class StudentInfoController {
     @Autowired
     private StudentInfoService studentInfoService;
+    @Autowired
+    private ResumeInfoService resumeInfoService;
+    @Autowired
+    private JobInfoService jobInfoService;
+    @Autowired
+    private DeliverRecordInfoService deliverRecordInfoService;
 
     @RequestMapping("/getInfo") //请求路径（ajax接口）
     @ResponseBody   //直接返回字符串  不经过视图解析
@@ -38,5 +56,112 @@ public class StudentInfoController {
                 .setData(list)
                 .toString();
     }
+    @RequestMapping("/getMyInfo")//请求路径（ajax接口）
+    @ResponseBody
+    public String getStudentInfo(HttpSession session){
+        //String studentId = (String) session.getAttribute("studentId");
+        String studentId = "2220172361";
+        StudentInfo student = studentInfoService.getById(studentId);
+        return new RestResult()
+                .setCode(ResultCode.SUCCESS)
+                .setMessage("成功")
+                .setData(student)
+                .toString();
+    }
+    @RequestMapping("/getMyResumes")
+    @ResponseBody
+    public String getStudentResumes(HttpSession session){
+        //String studentId = (String) session.getAttribute("studentId");
+        String studentId = "2220172361";
+        //存放查询结果的list
+        List<ResumeInfo> resumeInfos;
+        //设置查询条件的wrapper
+        QueryWrapper<ResumeInfo> wrapper = new QueryWrapper<>();
+        wrapper.eq("student_id",studentId);
+        //执行查询
+        resumeInfos = resumeInfoService.list(wrapper);
+        //返回结果
+        return new RestResult()
+                .setCode(ResultCode.SUCCESS)
+                .setData(resumeInfos)
+                .toString();
+    }
+    @RequestMapping("/uploadResume")
+    @ResponseBody
+    public String uploadResume(@RequestParam("file") MultipartFile file, HttpServletRequest request){
+        //String studentId = (String) request.getSession().getAttribute("studentId");
+        String studentId = "2220172361";
+        //String resumeName = (String) request.getParameter("resumeName");
+        String resumeName = "myResume.pdf";
+        //传输简历pdf文件
+        //判断文件是否为空
+        if(!file.isEmpty()){
+            //设置文件存储路径
+            String storagePath = "D:\\ResumesUpload";
+            try{
+                file.transferTo(new File(storagePath+ File.separator+resumeName));//把文件写入目标文件地址
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+        //更新数据库
+        ResumeInfo resumeInfo = new ResumeInfo();
+        resumeInfo.setResumeName(resumeName);
+        resumeInfo.setResumeStatus(0);//unknow
+        resumeInfo.setStudentId(studentId);
+        resumeInfoService.save(resumeInfo);
+        return new RestResult().setCode(ResultCode.SUCCESS).toString();
+    }
+    @RequestMapping("/deleteResume")
+    @ResponseBody
+    public String deleteResume(HttpSession session, @RequestBody(required = true)Map<String,Object> map){
+        //String studentId = (String) session.getAttribute("studentId");
+        String studentId = "2220172361";
+        String resumeId = (String) map.get("resumeId");
+        ResumeInfo resumeInfo = resumeInfoService.getById(resumeId);
+        resumeInfo.setResumeStatus(-1);
+        resumeInfoService.updateById(resumeInfo);
+        return new RestResult().setCode(ResultCode.SUCCESS).toString();
+    }
+    @RequestMapping("/getJobs")
+    @ResponseBody
+    public String getJobs(HttpSession session){
+        //String studentId = (String) session.getAttribute("studentId");
+        String studentId = "2220172361";
+        int current = 1;
+        int size = 20;
+        //设置分页器
+        IPage<JobInfo> jobInfoIPage = new Page<>(current,size);
+        //执行无条件查询
+        QueryWrapper<JobInfo> wrapper = new QueryWrapper<>();
+        List<JobInfo> jobInfos = jobInfoService.listJobsWithCompanyName(wrapper);
+        //返回结果
+        return new RestResult()
+                .setCode(ResultCode.SUCCESS)
+                .setData(jobInfos)
+                .toString();
+    }
+    @RequestMapping("/getRecord")
+    @ResponseBody
+    public String getDeliverRecord(HttpSession session){
+        //String studentId = (String) session.getAttribute("studentId");
+        String studentId = "2220172361";
+        int current = 1;
+        int size = 20;
+        //设置分页器
+        IPage<DeliverRecordInfo> deliverRecordInfoIPage = new Page<>(current,size);
+        //设置查询条件的wrapper
+        QueryWrapper<DeliverRecordInfo> deliverRecordInfoWrapper = new QueryWrapper<>();
+        deliverRecordInfoWrapper.eq("student_id",studentId);
+        //执行查询
+        List<DeliverRecordInfo> deliverRecordInfos = deliverRecordInfoService.page(deliverRecordInfoIPage,deliverRecordInfoWrapper).getRecords();
+        //返回结果
+        return new RestResult()
+                .setCode(ResultCode.SUCCESS)
+                .setData(deliverRecordInfos)
+                .toString();
+    }
+
 }
 

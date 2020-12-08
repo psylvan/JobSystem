@@ -1,11 +1,14 @@
 package pojo;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import sun.net.www.protocol.http.HttpURLConnection;
 
 /**
  * <p>
@@ -24,7 +27,7 @@ public class StudentInfo implements Serializable {
     private static final int MAN = 1;
     private static final int WOMAN = 0;
 
-    @TableId(type = IdType.ASSIGN_UUID)
+    @TableId(type = IdType.INPUT)
     private String studentId;
 
     private String password;
@@ -37,5 +40,7 @@ public class StudentInfo implements Serializable {
 
     private String hometown;
 
+    @TableField(exist = false)
+    private List<ResumeInfo> resumeInfos;
 
 }

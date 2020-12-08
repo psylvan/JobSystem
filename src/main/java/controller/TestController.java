@@ -26,4 +26,11 @@ public class TestController {
     public String t2(HttpSession session){
         return session.getAttribute("user").toString();
     }
+
+    @RequestMapping("/t3")
+    public String t3(){
+        resumeInfoService.getResumeById();
+        return null;
+    }
+
 }

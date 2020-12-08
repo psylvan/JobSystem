@@ -1,7 +1,10 @@
 package service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import pojo.JobInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface JobInfoService extends IService<JobInfo> {
 
+    public List<JobInfo> listJobsWithCompanyName(Wrapper wrapper);
 }
