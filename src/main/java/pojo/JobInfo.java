@@ -28,6 +28,8 @@ public class JobInfo implements Serializable {
 
     private String companyId;
 
+    private String companyName;
+
     private String jobName;
 
     private String jobType;
