@@ -11,8 +11,15 @@ import pojo.CompanyInfo;
 import pojo.DeliverRecordInfo;
 import service.CompanyInfoService;
 import service.DeliverRecordInfoService;
+import service.ResumeInfoService;
+import util.json.RestResult;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import static javax.swing.text.html.CSS.getAttribute;
 
@@ -29,6 +36,8 @@ public class CompanyInfoController {
 
     @Autowired
     CompanyInfoService companyInfoService;
+    @Autowired
+    ResumeInfoService resumeInfoService;
     @RequestMapping("/doRegister")
     public String register(HttpServletRequest request){
         String companyId = (String) request.getParameter("companyId");
@@ -51,6 +60,15 @@ public class CompanyInfoController {
         k.setCompanyId(companyId);
         k.setCheckStatus(CheckInfo.CHECKING);
         return companyInfoService.register(c,k);
+    }
+    
+    @RequestMapping("/getResume")
+    public String getResume(String studentName, HttpSession session){
+        String companyId = (String) session.getAttribute("user");
+
+        List<HashMap<String , Object> > list = new ArrayList<>();
+        HashMap<String,Object> hs = new HashMap<>();
+        return new RestResult().setData(hs).toString();
     }
 }
 

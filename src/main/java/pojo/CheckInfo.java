@@ -29,6 +29,8 @@ public class CheckInfo implements Serializable {
     private String checkId;
 
     private String companyId;
+    @TableField(exist = false)
+    private CompanyInfo companyInfo;
 
     private Integer checkStatus;
 

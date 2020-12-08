@@ -4,6 +4,7 @@ import java.util.Date;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,8 +33,12 @@ public class DeliverRecordInfo implements Serializable {
     private String deliverId;
 
     private String jobId;
+    @TableField(exist = false)
+    private JobInfo jobInfo;
 
     private String resumeId;
+    @TableField(exist = false)
+    private ResumeInfo resumeInfo;
 
     private Date createTime;
 
