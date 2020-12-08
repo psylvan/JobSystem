@@ -2,4 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.JobInfoMapper">
 
+    <select id="listJobsWithCompanyName" resultType="JobInfo" resultMap="">
+	    SELECT * FROM job_info JOIN company_info ON job_info.campany_id = companyInfo.campany_id ${ew.customSqlSegment}
+    </select>
 </mapper>
