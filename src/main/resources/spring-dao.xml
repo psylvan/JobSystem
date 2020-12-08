@@ -25,6 +25,13 @@
         <property name="globalConfig" ref="globalConfig"></property>
 <!--        <property name="configuration" ref="configuration"></property>-->
         <property name="configLocation" value="classpath:mybaits-config.xml"/>
+        <property name="plugins">
+            <array>
+                <bean class="com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor">
+
+                </bean>
+            </array>
+        </property>
     </bean>
 
     <!--mybatis-plus配置-->
@@ -40,5 +47,12 @@
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
         <property name="basePackage" value="mapper"/>
+    </bean>
+
+
+
+    <bean id="countSqlParser" class="com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize">
+        <!-- 设置为 true 可以优化部分 left join 的sql -->
+        <property name="optimizeJoin" value="true"/>
     </bean>
 </beans>
