@@ -7,6 +7,7 @@
     </properties>
     <settings>
         <setting name="logImpl" value="STDOUT_LOGGING"/>
+<!--        <setting name="" value=""/>-->
     </settings>
     <!--    给实体类起别名-->
     <typeAliases>
@@ -15,5 +16,11 @@
     
     <mappers>
         <mapper resource="mapper/xml/ResumeInfoMapper.xml"/>
+        <mapper resource="mapper/xml/AdminInfoMapper.xml"/>
+        <mapper resource="mapper/xml/CompanyInfoMapper.xml"/>
+        <mapper resource="mapper/xml/DeliverRecordInfoMapper.xml"/>
+        <mapper resource="mapper/xml/JobInfoMapper.xml"/>
+        <mapper resource="mapper/xml/StudentInfoMapper.xml"/>
+
     </mappers>
 </configuration>
