@@ -2,6 +2,7 @@ package pojo;
 
 import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -31,6 +32,8 @@ public class ResumeInfo implements Serializable {
     private String resumeId;
 
     private String studentId;
+    @TableField(exist = false)
+    private StudentInfo studentInfo;
 
     private String resumeName;
 
@@ -41,5 +44,6 @@ public class ResumeInfo implements Serializable {
 
     private String url;
 
-
+    @TableField(exist = false)
+    private List<DeliverRecordInfo> deliverRecordInfos;
 }
