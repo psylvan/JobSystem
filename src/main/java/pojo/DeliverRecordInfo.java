@@ -44,7 +44,7 @@ public class DeliverRecordInfo implements Serializable {
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
-    private Integer status;
+    private Integer deliverStatus;
 
 
 }

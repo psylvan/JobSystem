@@ -1,5 +1,7 @@
 package mapper;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
@@ -17,5 +19,6 @@ import java.util.List;
  * @since 2020-12-06
  */
 public interface DeliverRecordInfoMapper extends BaseMapper<DeliverRecordInfo> {
+    public List<DeliverRecordInfo> listDeliverRecordInfoWithJobNameAndCompanyName(@Param(Constants.WRAPPER) Wrapper wrapper);
     public IPage<DeliverRecordInfo> getDeliverRecordBySnameCid(Page<?> page, @Param("sname") String studentName, @Param("cid") String companyId);
 }

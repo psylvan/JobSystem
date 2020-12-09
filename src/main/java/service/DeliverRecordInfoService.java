@@ -1,5 +1,9 @@
 package service;
 
+
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.PathVariable;
 import pojo.DeliverRecordInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -15,6 +19,8 @@ import java.util.List;
  * @since 2020-12-06
  */
 public interface DeliverRecordInfoService extends IService<DeliverRecordInfo> {
+
+    public List<DeliverRecordInfo> listDeliverRecordInfoWithJobNameAndCompanyName(@Param(Constants.WRAPPER) Wrapper wrapper);
 
     public String  getDeliverRecordBySnameCid(int current,int size,String studentName, String companyId);
 

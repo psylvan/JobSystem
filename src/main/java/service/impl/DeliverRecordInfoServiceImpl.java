@@ -1,5 +1,9 @@
 package service.impl;
 
+
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import org.apache.ibatis.annotations.Param;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sun.corba.se.impl.ior.OldJIDLObjectKeyTemplate;
@@ -17,6 +21,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -27,9 +33,12 @@ import java.util.List;
  */
 @Service
 public class DeliverRecordInfoServiceImpl extends ServiceImpl<DeliverRecordInfoMapper, DeliverRecordInfo> implements DeliverRecordInfoService {
+      @Autowired
+    private DeliverRecordInfoMapper deliverRecordInfoMapper;  
+  public List<DeliverRecordInfo> listDeliverRecordInfoWithJobNameAndCompanyName(Wrapper wrapper){
+        return deliverRecordInfoMapper.listDeliverRecordInfoWithJobNameAndCompanyName(wrapper);
+    }
 
-    @Autowired
-    private DeliverRecordInfoMapper deliverRecordInfoMapper;
     @Override
     public String getDeliverRecordBySnameCid(int current,int size,String studentName, String companyId) {
         Page<DeliverRecordInfo> page = new Page<>(current,size);
