@@ -2,4 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.DeliverRecordInfoMapper">
 
+    <select id="getDeliverRecordBySnameCid" resultMap="selectDR">
+        select deliver_id,d.create_time dt,
+        d.resume_id rid,d.status dstatus,
+        d.job_id jid,
+        job_name,j.job_type jtype,
+        r.resume_name rname,r.url ru,r.resume_id,
+        s.student_name sname,s.student_id sid
+        from deliver_record_info d,
+        job_info j,resume_info r,student_info s ,company_info c
+        where d.job_id = j.job_id and j.company_id = c.company_id
+        and c.company_id = #{cid}
+        and d.resume_id = r.resume_id and r.student_id = s.student_id
+        and s.student_name = #{sname};
+    </select>
+    <resultMap id="selectDR" type="pojo.DeliverRecordInfo">
+        <result property="createTime" column="dt"/>
+        <association property="resumeInfo" javaType="pojo.ResumeInfo">
+            <id property="resumeId" column="r.resume_id"/>
+            <association property="studentInfo" javaType="pojo.StudentInfo">
+                <id property="studentId" column="sid"/>
+            </association>
+        </association>
+        <association property="jobInfo" javaType="pojo.JobInfo">
+            <id property="jobId" column="jid"/>
+        </association>
+    </resultMap>
+
+    <select id="test" resultMap="map1">
+        select deliver_id from deliver_record_info d,job_info j
+    </select>
+    <resultMap id="map1" type="pojo.DeliverRecordInfo">
+        <result property="jobId" column="deliver_id"/>
+        <association property="jobInfo" javaType="pojo.JobInfo">
+
+        </association>
+    </resultMap>
 </mapper>
