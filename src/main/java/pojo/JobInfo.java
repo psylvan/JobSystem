@@ -28,7 +28,8 @@ public class JobInfo implements Serializable {
 
     private String companyId;
 
-    private String companyName;
+    @TableField(exist = false)
+    private CompanyInfo companyInfo;
 
     private String jobName;
 

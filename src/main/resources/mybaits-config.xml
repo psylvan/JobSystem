@@ -15,7 +15,6 @@
     </typeAliases>
     
     <mappers>
-        <mapper resource="mapper.xml.StudentInfoMapper.xml"/>
-
+        <mapper resource="mapper/xml/JobInfoMapper.xml"/>
     </mappers>
 </configuration>
