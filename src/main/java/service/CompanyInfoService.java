@@ -16,4 +16,6 @@ import pojo.DeliverRecordInfo;
 public interface CompanyInfoService extends IService<CompanyInfo> {
 
     public String register(CompanyInfo companyInfo, CheckInfo checkInfo);
+
+
 }

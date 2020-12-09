@@ -18,5 +18,5 @@ public interface DeliverRecordInfoService extends IService<DeliverRecordInfo> {
 
     public String  getDeliverRecordBySnameCid(int current,int size,String studentName, String companyId);
 
-    public String employ(String resumeId,boolean flag);
+    public String employ(String deliverId,boolean flag);
 }

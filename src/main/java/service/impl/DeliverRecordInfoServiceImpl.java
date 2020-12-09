@@ -6,6 +6,7 @@ import com.sun.corba.se.impl.ior.OldJIDLObjectKeyTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import pojo.DeliverRecordInfo;
 import mapper.DeliverRecordInfoMapper;
+import pojo.ResumeInfo;
 import service.DeliverRecordInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -50,10 +51,19 @@ public class DeliverRecordInfoServiceImpl extends ServiceImpl<DeliverRecordInfoM
     }
 
     @Override
-    public String employ(String resumeId, boolean flag) {
-        DeliverRecordInfo recordInfo = deliverRecordInfoMapper.selectById(resumeId);
-        recordInfo.setStatus(DeliverRecordInfo.ADOPTED);
+    public String employ(String deliverId, boolean flag) {
+        DeliverRecordInfo recordInfo = deliverRecordInfoMapper.selectById(deliverId);
+        RestResult restResult = new RestResult().setCode(ResultCode.SUCCESS);
+        if(flag){
+            recordInfo.setStatus(DeliverRecordInfo.ADOPTED);
+            restResult.setMessage("已发送录用");
+        }
+
+        else{
+            recordInfo.setStatus(DeliverRecordInfo.UNADOPTED);
+            restResult.setMessage("已发送拒用");
+        }
         deliverRecordInfoMapper.updateById(recordInfo);
-        return new RestResult().setCode(ResultCode.SUCCESS).setMessage("已发送录用").toString();
+        return restResult.toString();
     }
 }

@@ -8,14 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import pojo.CheckInfo;
 import pojo.CompanyInfo;
 import pojo.DeliverRecordInfo;
 import service.CompanyInfoService;
 import service.DeliverRecordInfoService;
+import service.JobInfoService;
 import service.ResumeInfoService;
 import util.json.RestResult;
 
+import javax.print.attribute.standard.JobMediaSheets;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -43,6 +46,8 @@ public class CompanyInfoController {
     ResumeInfoService resumeInfoService;
     @Autowired
     DeliverRecordInfoService deliverRecordInfoService;
+    @Autowired
+    JobInfoService jobInfoService;
     @RequestMapping("/doRegister")
     public String register(HttpServletRequest request){
         String companyId = (String) request.getParameter("companyId");
@@ -73,10 +78,17 @@ public class CompanyInfoController {
         return deliverRecordInfoService.getDeliverRecordBySnameCid(current,size,studentName,companyId);
     }
 
-    @RequestMapping("/employ/{resumeId}/{flag}")
-    public void employ(@PathVariable("resumeId") String resumeId,@PathVariable("flag") boolean flag){
-
+    @RequestMapping("/employ/{deliverId}/{flag}")
+    public String employ(@PathVariable("deliverId") String deliverId,@PathVariable("flag") boolean flag){
+        return deliverRecordInfoService.employ(deliverId,flag);
     }
 
+    @RequestMapping("/getMyJobs")
+    public String getCompanyJobs(HttpSession session,int current,int size){
+//        String companyId = (String) session.getAttribute("user");
+        String companyId = "123";
+        return jobInfoService.getJobs(companyId, current, size);
+
+    }
 }
 

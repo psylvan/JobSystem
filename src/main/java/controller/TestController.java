@@ -36,11 +36,4 @@ public class TestController {
         return deliverRecordInfoService.getDeliverRecordBySnameCid(0,5,studentName,"123");
     }
 
-    @Autowired
-    DeliverRecordInfoMapper mapper;
-    @RequestMapping("/t4")
-    public String t4(){
-        System.out.println(mapper.test());
-        return "123";
-    }
 }
