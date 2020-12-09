@@ -21,6 +21,5 @@
         <mapper resource="mapper/xml/DeliverRecordInfoMapper.xml"/>
         <mapper resource="mapper/xml/JobInfoMapper.xml"/>
         <mapper resource="mapper/xml/StudentInfoMapper.xml"/>
-
     </mappers>
 </configuration>
