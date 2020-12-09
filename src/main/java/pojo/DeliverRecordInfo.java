@@ -29,7 +29,7 @@ public class DeliverRecordInfo implements Serializable {
     private static final int UNADOPTED = -1; //未被企业录用
     private static final int UNACCEPTED = -2;//拒绝企业OFFER
 
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(type = IdType.ASSIGN_UUID)
     private String deliverId;
 
     private String jobId;

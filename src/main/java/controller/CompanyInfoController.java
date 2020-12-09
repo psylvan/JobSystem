@@ -1,6 +1,7 @@
 package controller;
 
 
+import mapper.DeliverRecordInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -38,6 +39,8 @@ public class CompanyInfoController {
     CompanyInfoService companyInfoService;
     @Autowired
     ResumeInfoService resumeInfoService;
+    @Autowired
+    DeliverRecordInfoService deliverRecordInfoService;
     @RequestMapping("/doRegister")
     public String register(HttpServletRequest request){
         String companyId = (String) request.getParameter("companyId");
@@ -62,13 +65,11 @@ public class CompanyInfoController {
         return companyInfoService.register(c,k);
     }
     
-    @RequestMapping("/getResume")
+    @RequestMapping("/getDeliverRecord")
     public String getResume(String studentName, HttpSession session){
         String companyId = (String) session.getAttribute("user");
 
-        List<HashMap<String , Object> > list = new ArrayList<>();
-        HashMap<String,Object> hs = new HashMap<>();
-        return new RestResult().setData(hs).toString();
+        return deliverRecordInfoService.getDeliverRecordBySnameCid(studentName,companyId);
     }
 }
 
