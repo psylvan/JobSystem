@@ -24,7 +24,6 @@ import javax.servlet.http.HttpSession;
  * @since 2020-12-06
  */
 @Controller
-//@RequestMapping("/jobInfo")
 public class JobInfoController {
     @Autowired
     private JobInfoService jobInfoService;
@@ -48,7 +47,7 @@ public class JobInfoController {
         return new RestResult().setCode(ResultCode.FAIL).setMessage("职位已存在").toString();
     }
 
-    @RequestMapping("/addJob")
+    @RequestMapping("/removeJob")
     @ResponseBody
     public String removeJob(HttpServletRequest request){
         String jobId=request.getParameter("jobId");
