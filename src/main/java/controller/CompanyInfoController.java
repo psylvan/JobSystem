@@ -3,6 +3,7 @@ package controller;
 
 import mapper.DeliverRecordInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
@@ -69,8 +70,13 @@ public class CompanyInfoController {
     @RequestMapping("/getDeliverRecord")
     public String getResume(String studentName,int current,int size, HttpSession session){
         String companyId = (String) session.getAttribute("user");
-
         return deliverRecordInfoService.getDeliverRecordBySnameCid(current,size,studentName,companyId);
     }
+
+    @RequestMapping("/employ/{resumeId}/{flag}")
+    public void employ(@PathVariable("resumeId") String resumeId,@PathVariable("flag") boolean flag){
+
+    }
+
 }
 

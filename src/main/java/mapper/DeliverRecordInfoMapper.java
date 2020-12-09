@@ -18,5 +18,4 @@ import java.util.List;
  */
 public interface DeliverRecordInfoMapper extends BaseMapper<DeliverRecordInfo> {
     public IPage<DeliverRecordInfo> getDeliverRecordBySnameCid(Page<?> page, @Param("sname") String studentName, @Param("cid") String companyId);
-    public List<DeliverRecordInfo> test();
 }

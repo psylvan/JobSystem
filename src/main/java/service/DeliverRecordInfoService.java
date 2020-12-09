@@ -1,5 +1,6 @@
 package service;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import pojo.DeliverRecordInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -17,4 +18,5 @@ public interface DeliverRecordInfoService extends IService<DeliverRecordInfo> {
 
     public String  getDeliverRecordBySnameCid(int current,int size,String studentName, String companyId);
 
+    public String employ(String resumeId,boolean flag);
 }

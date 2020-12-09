@@ -43,9 +43,17 @@ public class DeliverRecordInfoServiceImpl extends ServiceImpl<DeliverRecordInfoM
             hs.put("resumeName",record.getResumeInfo().getResumeName());
             hs.put("studentName",record.getResumeInfo().getStudentInfo().getStudentName());
             hs.put("time",record.getCreateTime());
-
+            hs.put("resumeId",record.getResumeId());
             restList.add(hs);
         }
         return new RestResult().setData(restList).setCode(ResultCode.SUCCESS).toString();
+    }
+
+    @Override
+    public String employ(String resumeId, boolean flag) {
+        DeliverRecordInfo recordInfo = deliverRecordInfoMapper.selectById(resumeId);
+        recordInfo.setStatus(DeliverRecordInfo.ADOPTED);
+        deliverRecordInfoMapper.updateById(recordInfo);
+        return new RestResult().setCode(ResultCode.SUCCESS).setMessage("已发送录用").toString();
     }
 }
