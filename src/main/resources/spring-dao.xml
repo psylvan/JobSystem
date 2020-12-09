@@ -28,7 +28,6 @@
         <property name="plugins">
             <array>
                 <bean class="com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor">
-
                 </bean>
             </array>
         </property>
