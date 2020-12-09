@@ -42,7 +42,7 @@ public class DeliverRecordInfo implements Serializable {
 
     private Date createTime;
 
-    private Integer status;
+    private Integer deliverStatus;
 
 
 }

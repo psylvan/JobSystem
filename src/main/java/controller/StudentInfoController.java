@@ -17,6 +17,7 @@ import pojo.DeliverRecordInfo;
 import pojo.JobInfo;
 import pojo.ResumeInfo;
 import pojo.StudentInfo;
+import pojo.requestBody.GetJobsRequestBody;
 import service.*;
 import util.json.RestResult;
 import util.json.ResultCode;
@@ -126,15 +127,31 @@ public class StudentInfoController {
     }
     @RequestMapping("/getJobs")
     @ResponseBody
-    public String getJobs(HttpSession session){
+    public String getJobs(HttpSession session, @RequestBody GetJobsRequestBody getJobsRequestBody){
         //String studentId = (String) session.getAttribute("studentId");
         String studentId = "2220172361";
+        String companyName = getJobsRequestBody.getCompanyName();
+        String jobName = getJobsRequestBody.getJobName();
+        String jobType = getJobsRequestBody.getJobType();
+        System.out.println(companyName);
+        System.out.println(jobName);
+        System.out.println(jobType);
+        //设置分页器
         int current = 1;
         int size = 20;
-        //设置分页器
         IPage<JobInfo> jobInfoIPage = new Page<>(current,size);
-        //执行无条件查询
+        //设置查询条件
         QueryWrapper<JobInfo> wrapper = new QueryWrapper<>();
+        if (!companyName.equals("")) {
+            wrapper.like("company_name",companyName);
+        }
+        if (!jobName.equals("")) {
+            wrapper.like("job_name",jobName);
+        }
+        if (!jobType.equals("")) {
+            wrapper.eq("job_type",jobType);
+        }
+        //执行查询
         List<JobInfo> jobInfos = jobInfoService.listJobsWithCompanyName(wrapper);
         //返回结果
         return new RestResult()
@@ -155,7 +172,7 @@ public class StudentInfoController {
         QueryWrapper<DeliverRecordInfo> deliverRecordInfoWrapper = new QueryWrapper<>();
         deliverRecordInfoWrapper.eq("student_id",studentId);
         //执行查询
-        List<DeliverRecordInfo> deliverRecordInfos = deliverRecordInfoService.page(deliverRecordInfoIPage,deliverRecordInfoWrapper).getRecords();
+        List<DeliverRecordInfo> deliverRecordInfos = deliverRecordInfoService.listDeliverRecordInfoWithJobNameAndCompanyName(deliverRecordInfoWrapper);
         //返回结果
         return new RestResult()
                 .setCode(ResultCode.SUCCESS)
