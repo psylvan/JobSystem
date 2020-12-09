@@ -3,6 +3,8 @@ package service.impl;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import pojo.JobInfo;
 import mapper.JobInfoMapper;
@@ -35,5 +37,20 @@ public class JobInfoServiceImpl extends ServiceImpl<JobInfoMapper, JobInfo> impl
         Page<JobInfo> jobInfoPage = jobInfoMapper.selectPage(new Page<>(current, size), new QueryWrapper<JobInfo>().eq("company_id", companyId));
         List<JobInfo> records = jobInfoPage.getRecords();
         return new RestResult().setCode(ResultCode.SUCCESS).setData(records).toString();
+    }
+
+    public boolean insertJob(JobInfo job){
+        QueryWrapper<JobInfo> wrapper=new QueryWrapper<>();
+        List<JobInfo> list=jobInfoMapper.selectList(wrapper.lambda().eq(JobInfo::getJobId,job.getJobId()));
+        if(list.size()>0){
+            return false;
+        }
+        jobInfoMapper.insert(job);
+        return true;
+    }
+
+    @Override
+    public void deleteJobById(String jobId) {
+        jobInfoMapper.deleteById(jobId);
     }
 }
