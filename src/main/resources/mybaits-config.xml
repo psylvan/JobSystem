@@ -8,11 +8,13 @@
     <settings>
         <setting name="logImpl" value="STDOUT_LOGGING"/>
 <!--        <setting name="" value=""/>-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
     <!--    给实体类起别名-->
     <typeAliases>
         <package name="com.ding.pojo"/>
     </typeAliases>
+    
     
     <mappers>
         <mapper resource="mapper/xml/ResumeInfoMapper.xml"/>
@@ -21,6 +23,5 @@
         <mapper resource="mapper/xml/DeliverRecordInfoMapper.xml"/>
         <mapper resource="mapper/xml/JobInfoMapper.xml"/>
         <mapper resource="mapper/xml/StudentInfoMapper.xml"/>
-
     </mappers>
 </configuration>
