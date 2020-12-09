@@ -3,6 +3,7 @@ package pojo;
 import java.util.Date;
 import java.io.Serializable;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -40,6 +41,7 @@ public class DeliverRecordInfo implements Serializable {
     @TableField(exist = false)
     private ResumeInfo resumeInfo;
 
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
     private Integer status;

@@ -18,6 +18,7 @@ import util.json.RestResult;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.nio.channels.SeekableByteChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,10 +67,10 @@ public class CompanyInfoController {
     }
     
     @RequestMapping("/getDeliverRecord")
-    public String getResume(String studentName, HttpSession session){
+    public String getResume(String studentName,int current,int size, HttpSession session){
         String companyId = (String) session.getAttribute("user");
 
-        return deliverRecordInfoService.getDeliverRecordBySnameCid(studentName,companyId);
+        return deliverRecordInfoService.getDeliverRecordBySnameCid(current,size,studentName,companyId);
     }
 }
 

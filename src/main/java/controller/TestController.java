@@ -32,9 +32,8 @@ public class TestController {
     }
 
     @RequestMapping("/t3")
-    public String t3(){
-        deliverRecordInfoService.getDeliverRecordBySnameCid("dsj","123");
-        return null;
+    public String t3(String studentName){
+        return deliverRecordInfoService.getDeliverRecordBySnameCid(0,5,studentName,"123");
     }
 
     @Autowired
