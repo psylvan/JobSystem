@@ -1,14 +1,25 @@
 package service.impl;
 
+
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import org.apache.ibatis.annotations.Param;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.sun.corba.se.impl.ior.OldJIDLObjectKeyTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import pojo.DeliverRecordInfo;
 import mapper.DeliverRecordInfoMapper;
+import pojo.ResumeInfo;
 import service.DeliverRecordInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import util.json.RestResult;
+import util.json.ResultCode;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import java.util.List;
 
@@ -22,9 +33,46 @@ import java.util.List;
  */
 @Service
 public class DeliverRecordInfoServiceImpl extends ServiceImpl<DeliverRecordInfoMapper, DeliverRecordInfo> implements DeliverRecordInfoService {
-    @Autowired
-    DeliverRecordInfoMapper deliverRecordInfoMapper;
-    public List<DeliverRecordInfo> listDeliverRecordInfoWithJobNameAndCompanyName(Wrapper wrapper){
+      @Autowired
+    private DeliverRecordInfoMapper deliverRecordInfoMapper;  
+  public List<DeliverRecordInfo> listDeliverRecordInfoWithJobNameAndCompanyName(Wrapper wrapper){
         return deliverRecordInfoMapper.listDeliverRecordInfoWithJobNameAndCompanyName(wrapper);
+    }
+
+    @Override
+    public String getDeliverRecordBySnameCid(int current,int size,String studentName, String companyId) {
+        Page<DeliverRecordInfo> page = new Page<>(current,size);
+        IPage<DeliverRecordInfo> deliverRecordBySnameCid = deliverRecordInfoMapper.getDeliverRecordBySnameCid(page,studentName, companyId);
+        List<DeliverRecordInfo> records = deliverRecordBySnameCid.getRecords();
+
+        List<HashMap<String , Object>> restList = new ArrayList<>();
+        for(DeliverRecordInfo record : records){
+            HashMap<String , Object> hs = new HashMap<>();
+            hs.put("jobName",record.getJobInfo().getJobName());
+            hs.put("jobType",record.getJobInfo().getJobType());
+            hs.put("resumeName",record.getResumeInfo().getResumeName());
+            hs.put("studentName",record.getResumeInfo().getStudentInfo().getStudentName());
+            hs.put("time",record.getCreateTime());
+            hs.put("resumeId",record.getResumeId());
+            restList.add(hs);
+        }
+        return new RestResult().setData(restList).setCode(ResultCode.SUCCESS).toString();
+    }
+
+    @Override
+    public String employ(String deliverId, boolean flag) {
+        DeliverRecordInfo recordInfo = deliverRecordInfoMapper.selectById(deliverId);
+        RestResult restResult = new RestResult().setCode(ResultCode.SUCCESS);
+        if(flag){
+            recordInfo.setStatus(DeliverRecordInfo.ADOPTED);
+            restResult.setMessage("已发送录用");
+        }
+
+        else{
+            recordInfo.setStatus(DeliverRecordInfo.UNADOPTED);
+            restResult.setMessage("已发送拒用");
+        }
+        deliverRecordInfoMapper.updateById(recordInfo);
+        return restResult.toString();
     }
 }

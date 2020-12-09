@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.DeliverRecordInfoMapper">
+
     <select id="listDeliverRecordInfoWithJobNameAndCompanyName" resultMap="listDeliverRecordInfoWithJobNameAndCompanyNameResultMap">
         SELECT deliver_id,status,resume_info.resume_id,job_info.job_id,job_name,company_info.company_id,company_name
         FROM deliver_record_info
@@ -20,6 +21,53 @@
                 <id column="company_id" property="companyId"></id>
                 <result column="company_name" property="companyName"></result>
             </association>
+        </association>
+
+    <select id="getDeliverRecordBySnameCid" resultMap="selectDR">
+        select deliver_id,d.job_id,d.resume_id,d.create_time,d.status,
+        j.company_id,j.job_name,j.job_name,j.job_type,j.job_description,
+        r.student_id,r.resume_name,r.resume_status,r.create_time rct,r.url,
+        s.password,s.student_name,s.sex,s.political_status,s.hometown
+        from deliver_record_info d,
+        job_info j,resume_info r,student_info s ,company_info c
+        where d.job_id = j.job_id and j.company_id = c.company_id
+        and c.company_id = #{cid}
+        and d.resume_id = r.resume_id and r.student_id = s.student_id
+        and s.student_name = #{sname}
+    </select>
+    <resultMap id="selectDR" type="pojo.DeliverRecordInfo" >
+        <id property="deliverId" column="deliver_id"/>
+        <result property="jobId" column="job_id"/>
+        <result property="resumeId" column="resume_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="status" column="status"/>
+        <association property="resumeInfo" javaType="pojo.ResumeInfo">
+            <id property="resumeId" column="r.resume_id"/>
+            <result property="resumeName" column="resume_name"/>
+            <result property="studentId" column="student_id"/>
+            <result property="resumeStatus" column="resume_status"/>
+            <result property="createTime" column="rct"/>
+            <association property="studentInfo" javaType="pojo.StudentInfo" autoMapping="true">
+                <id property="studentId" column="student_id"/>
+                <result property="studentId" column="student_id"/>
+            </association>
+        </association>
+
+        <association property="jobInfo" javaType="pojo.JobInfo" autoMapping="true">
+            <id property="jobId" column="job_id"/>
+        </association>
+    </resultMap>
+
+
+
+
+    <select id="test" resultMap="map1">
+        select deliver_id from deliver_record_info d,job_info j
+    </select>
+    <resultMap id="map1" type="pojo.DeliverRecordInfo">
+        <result property="jobId" column="deliver_id"/>
+        <association property="jobInfo" javaType="pojo.JobInfo">
+
         </association>
     </resultMap>
 </mapper>

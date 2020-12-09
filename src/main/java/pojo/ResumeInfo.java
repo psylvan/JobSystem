@@ -28,7 +28,7 @@ public class ResumeInfo implements Serializable {
     public static final int USED = 1;
 
 
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(type = IdType.ASSIGN_UUID)
     private String resumeId;
 
     private String studentId;
