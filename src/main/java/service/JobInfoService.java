@@ -17,4 +17,6 @@ import java.util.List;
 public interface JobInfoService extends IService<JobInfo> {
 
     public List<JobInfo> listJobsWithCompanyName(Wrapper wrapper);
+
+    public String getJobs(String companyId,int current,int size);
 }

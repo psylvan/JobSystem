@@ -3,21 +3,26 @@ package controller;
 
 import mapper.DeliverRecordInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import pojo.CheckInfo;
 import pojo.CompanyInfo;
 import pojo.DeliverRecordInfo;
 import service.CompanyInfoService;
 import service.DeliverRecordInfoService;
+import service.JobInfoService;
 import service.ResumeInfoService;
 import util.json.RestResult;
 
+import javax.print.attribute.standard.JobMediaSheets;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.nio.channels.SeekableByteChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +46,8 @@ public class CompanyInfoController {
     ResumeInfoService resumeInfoService;
     @Autowired
     DeliverRecordInfoService deliverRecordInfoService;
+    @Autowired
+    JobInfoService jobInfoService;
     @RequestMapping("/doRegister")
     public String register(HttpServletRequest request){
         String companyId = (String) request.getParameter("companyId");
@@ -66,10 +73,22 @@ public class CompanyInfoController {
     }
     
     @RequestMapping("/getDeliverRecord")
-    public String getResume(String studentName, HttpSession session){
+    public String getResume(String studentName,int current,int size, HttpSession session){
         String companyId = (String) session.getAttribute("user");
+        return deliverRecordInfoService.getDeliverRecordBySnameCid(current,size,studentName,companyId);
+    }
 
-        return deliverRecordInfoService.getDeliverRecordBySnameCid(studentName,companyId);
+    @RequestMapping("/employ/{deliverId}/{flag}")
+    public String employ(@PathVariable("deliverId") String deliverId,@PathVariable("flag") boolean flag){
+        return deliverRecordInfoService.employ(deliverId,flag);
+    }
+
+    @RequestMapping("/getMyJobs")
+    public String getCompanyJobs(HttpSession session,int current,int size){
+//        String companyId = (String) session.getAttribute("user");
+        String companyId = "123";
+        return jobInfoService.getJobs(companyId, current, size);
+
     }
 }
 
