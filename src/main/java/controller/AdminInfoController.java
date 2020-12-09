@@ -16,6 +16,7 @@ import service.StudentInfoService;
 import util.json.RestResult;
 import util.json.ResultCode;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.ResponseBody;
 import pojo.CompanyInfo;
@@ -94,7 +95,7 @@ public class AdminInfoController {
     @RequestMapping("/showUnsolved")
     @ResponseBody
     public String getUnsolvedCompany() {
-        List<CompanyInfo> list = adminInfoService.selectUnsolvedCompany(-1);
+        List<CompanyInfo> list = adminInfoService.selectUnsolvedCompany(CompanyInfo.CHECKING);
         return new RestResult().setCode(ResultCode.SUCCESS).setMessage("成功").setData(list).toString();
     }
 
@@ -105,16 +106,22 @@ public class AdminInfoController {
         return new RestResult().setCode(ResultCode.SUCCESS).setMessage("成功").setData(list).toString();
     }
 
-    @RequestMapping("/insertStu")
+    @RequestMapping("/addStu")
     @ResponseBody
-    public String getStudent(){
+    public String addStudent(HttpServletRequest request){
         StudentInfo student=new StudentInfo();
-        student.setStudentId("2220172047");
-        student.setPassword("111");
-        student.setStudentName("aaa");
-        student.setSex(1);
-        student.setPoliticalStatus(null);
-        student.setHometown("北京");
+        String studentId=request.getParameter("studentId");
+        student.setStudentId(studentId);
+        String password=request.getParameter("password");
+        student.setPassword(password);
+        String studentName=request.getParameter("studentName");
+        student.setStudentName(studentName);
+        int sex=Integer.parseInt(request.getParameter("sex"));
+        student.setSex(sex);
+        String politicalStatus=request.getParameter("politicalStatus");
+        student.setPoliticalStatus(politicalStatus);
+        String hometown=request.getParameter("hometown");
+        student.setHometown(hometown);
         if(adminInfoService.insertStudent(student)){
             return new RestResult().setCode(ResultCode.SUCCESS).setMessage("成功").setData(student).toString();
         }
