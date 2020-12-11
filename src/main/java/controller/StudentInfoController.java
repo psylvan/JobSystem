@@ -180,5 +180,10 @@ public class StudentInfoController {
                 .toString();
     }
 
+    @RequestMapping("/commitOffer")
+    @ResponseBody
+    public String commit(String deliverId,boolean flag){
+        return deliverRecordInfoService.commitOffer(deliverId,flag);
+    }
 }
 
