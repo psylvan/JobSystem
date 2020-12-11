@@ -1,12 +1,11 @@
 package controller;
 
 
+import mapper.StudentInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 import pojo.AdminInfo;
 import pojo.CompanyInfo;
 import pojo.StudentInfo;
@@ -19,7 +18,7 @@ import util.json.ResultCode;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 import pojo.CompanyInfo;
 import pojo.StudentInfo;
 import service.AdminInfoService;
@@ -34,6 +33,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -131,6 +131,25 @@ public class AdminInfoController {
         out.close();
         input.close();
         return null;
+    }
+
+    @RequestMapping("/uploadStudent")
+    public String uploadStudent(@RequestBody List<Map> parmaMap){
+        new Thread(
+                ()->{
+                    for(Map<String,String> map : parmaMap){
+                        StudentInfo stu = new StudentInfo();
+                        stu.setStudentId(map.get("id"));
+                        stu.setPassword(map.get("password"));
+                        stu.setStudentName(map.get("name"));
+                        stu.setSex(map.get("sex").equals("男")?1:0);
+                        stu.setHometown(map.get("hometown"));
+                        stu.setPoliticalStatus(map.get("political"));
+                        studentInfoService.save(stu);
+                    }
+                }
+        ).start();
+        return new RestResult().setCode(ResultCode.SUCCESS).setMessage("添加成功").toString();
     }
 }
 
