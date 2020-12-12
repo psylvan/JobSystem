@@ -1,18 +1,29 @@
 package controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import mapper.DeliverRecordInfoMapper;
+import mapper.JobInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import pojo.JobInfo;
 import pojo.ResumeInfo;
 import pojo.StudentInfo;
+import pojo.requestBody.GetJobsRequestBody;
 import service.DeliverRecordInfoService;
 import service.ResumeInfoService;
 import service.StudentInfoService;
+import util.json.RestResult;
+import util.json.ResultCode;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RestController
 public class TestController {
@@ -36,4 +47,45 @@ public class TestController {
         return deliverRecordInfoService.getDeliverRecordBySnameCid(0,5,studentName,"123");
     }
 
+    @Autowired
+    JobInfoMapper jobInfoService;
+
+
+    @RequestMapping("/getJobs2")
+    public String getJobs(HttpSession session, HttpServletRequest request){
+        //String studentId = (String) session.getAttribute("studentId");
+        String studentId = "2220172361";
+        String companyName = request.getParameter("companyName");
+        String jobName = request.getParameter("jobName");
+        String jobType = request.getParameter("jobType");
+        System.out.println("=============");
+        System.out.println(companyName);
+        System.out.println(jobName);
+        System.out.println(jobType);
+        return  companyName+" "+jobName+" "+jobType;
+        /*
+        //设置分页器
+        int current = 1;
+        int size = 20;
+        IPage<JobInfo> jobInfoIPage = new Page<>(current,size);
+        //设置查询条件
+        QueryWrapper<JobInfo> wrapper = new QueryWrapper<>();
+        if (!companyName.equals("")) {
+            wrapper.like("company_name",companyName);
+        }
+        if (!jobName.equals("")) {
+            wrapper.like("job_name",jobName);
+        }
+        if (!jobType.equals("")) {
+            wrapper.eq("job_type",jobType);
+        }
+        //执行查询
+        List<JobInfo> jobInfos = jobInfoService.listJobsWithCompanyName(wrapper);
+        //返回结果
+        return new RestResult()
+                .setCode(ResultCode.SUCCESS)
+                .setData(jobInfos)
+                .toString();
+         */
+    }
 }

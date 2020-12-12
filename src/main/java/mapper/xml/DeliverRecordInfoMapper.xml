@@ -2,6 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.DeliverRecordInfoMapper">
 
+    <select id="listDeliverRecordInfoWithJobNameAndCompanyName" resultMap="listDeliverRecordInfoWithJobNameAndCompanyNameResultMap">
+        SELECT deliver_id,status,resume_info.resume_id,job_info.job_id,job_name,company_info.company_id,company_name
+        FROM deliver_record_info
+        JOIN resume_info ON resume_info.resume_id = deliver_record_info.resume_id
+        JOIN job_info ON  job_info.job_id = deliver_record_info.job_id
+        JOIN company_info ON job_info.company_id = company_info.company_id
+        ${ew.customSqlSegment}
+    </select>
+    <resultMap id="listDeliverRecordInfoWithJobNameAndCompanyNameResultMap" type="pojo.DeliverRecordInfo">
+        <id column="deliver_id" property="deliverId"></id>
+        <result column="status" property="status"></result>
+        <result column="resume_id" property="resumeId"></result>
+        <association property="jobInfo" javaType="pojo.JobInfo">
+            <id column="job_id" property="jobId"></id>
+            <result column="job_name" property="jobName"></result>
+            <association property="companyInfo" javaType="pojo.CompanyInfo">
+                <id column="company_id" property="companyId"></id>
+                <result column="company_name" property="companyName"></result>
+            </association>
+        </association>
+    </resultMap>
+
     <select id="getDeliverRecordBySnameCid" resultMap="selectDR">
         select deliver_id,d.job_id,d.resume_id,d.create_time,d.status,
         j.company_id,j.job_name,j.job_name,j.job_type,j.job_description,

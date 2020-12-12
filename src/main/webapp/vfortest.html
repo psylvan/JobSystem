@@ -26,11 +26,30 @@
             </table>
         </form>
     </div>
+    <hr>
+    <div id="jobSearchContainer">
+        <form>
+            <input type="text" v-model="jobName">
+            <input type="text" v-model="companyName">
+            <input type="text" v-model="jobType">
+            <button type="button" v-on:click="searchJobs">搜索</button>
+        </form>
+    </div>
     <div id="jobContainer">
         <ul>
             <li v-for="job in jobs">
                 <p>职位名称：{{job.jobName}}</p>
                 <p>公司名称：{{job.companyInfo.companyName}}</p>
+            </li>
+        </ul>
+    </div>
+    <hr>
+    <div id="deliverRecordContainer">
+        <ul>
+            <li v-for="deliverRecord in deliverRecords">
+                <p>公司名称：{{deliverRecord.jobInfo.companyInfo.companyName}}</p>
+                <p>职位名称：{{deliverRecord.jobInfo.jobName}}</p>
+                <p>投递状态：{{deliverRecord.deliverStatus}}</p>
             </li>
         </ul>
     </div>
@@ -49,7 +68,7 @@
             methods: {
                 getMyResumes: function (){
                     var that = this;
-                    axios.get("http://localhost:8080/Job/getMyResumes").then(function (response){
+                    axios.get('http://localhost:8080/Job/getMyResumes').then(function (response){
                         console.log(response);
                         that.myResumes = JSON.parse(response.data).data;
                         console.log(that.myResumes);
@@ -61,6 +80,33 @@
             },
             mounted(){
                 this.getMyResumes();
+            }
+        })
+
+        var jobSearchContainer = new Vue({
+            el: '#jobSearchContainer',
+            data: {
+                jobName:'',
+                companyName:'',
+                jobType:''
+            },
+            methods: {
+                searchJobs: function (){
+                    var that = this;
+                    axios.post('http://localhost:8080/Job/getJobs',{
+                            jobName: that.jobName,
+                            companyName: that.companyName,
+                            jobType: that.jobType
+                    }).then(function (response){
+                        var data = JSON.parse(response.data).data;
+                        jobContainer.displayJobs(data);
+                    },function (err){
+
+                    })
+                }
+            },
+            mounted(){
+                this.searchJobs();
             }
         })
 
@@ -78,10 +124,31 @@
                     },function (err){
 
                     })
+                },
+                displayJobs: function (data){
+                    console.log(data);
+                    this.jobs = data;
                 }
+            }
+        })
+        var deliverRecordContainer = new Vue({
+            el: '#deliverRecordContainer',
+            data: {
+                deliverRecords:[]
             },
-            mounted() {
-                this.getAllJobs();
+            methods: {
+              getMyDeliverRecords: function (){
+                  var that = this;
+                  axios.get("http://localhost:8080/Job/getRecord").then(function (response){
+                      console.log(response);
+                      that.deliverRecords = JSON.parse(response.data).data;
+                  },function (err){
+
+                  })
+              }
+            },
+            mounted(){
+                this.getMyDeliverRecords();
             }
         })
 
