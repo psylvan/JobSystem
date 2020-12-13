@@ -1,10 +1,141 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html lang="zh-CN">
 
+<head>
+<meta charset="utf-8">
+
+<title>就业系统</title>
+<link rel="stylesheet" href="../static/css/style.css">
+
+</head>
+
+<body>
+    <div class="spinner-border" role="status"id="zhuan"style="display:none">
+                   
+    </div>
+    <div class="content">
+        <div class="form sign-in aa"id="bus_log">
+            <form action="change()" autocomplete="off">
+               
+                <h2>企业用户登录</h2>
+                
+                <label>
+                    <span>账号</span>
+                    <input type="text" name="name_log" id="na_log" /><span></span>
+                </label>
+                <label>
+                    <span>密码</span>
+                    <input type="password" name="pwd_log" id="pwd_log" ><span></span>
+                </label>
+                <label>
+                    <span>验证码(点击刷新)</span>
+                    <input type="submit" id="code" onClick="change();"style="border:none;margin-bottom:25px">
+                    <input type="text" class="code" placeholder="请输入验证码">
+                   
+                    
+                </label>
+                <p class="forgot-pass"><a href="javascript:">忘记密码？</a></p>
+                <button type="button" class="submit" onclick="buslogin()">登 录</button>
+                <button type="button" class="fb-btn" onclick="log_stu()">使用 <span>学生</span> 帐号登录</button>
+            </form>
+        </div>
+        <div class="form sign-in" id="stu_log">
+        <form action="" autocomplete="off">
+            <h2>学生登录</h2>
+
+            <label>
+                <span>账号</span>
+                <input type="text" name="name_log" id="na_log" /><span></span>
+            </label>
+            <label>
+                <span>密码</span>
+                <input type="password" name="pwd_log" id="pwd_log" ><span></span>
+            </label>
+            <label>
+                <span>验证码(点击刷新)</span>
+                <input type="button" id="code1" onClick="change1();"style="border:none;margin-bottom:25px">
+                <input type="text" class="code" placeholder="请输入验证码">
+               
+               
+            </label>
+            <p class="forgot-pass"><a href="javascript:">忘记密码？</a></p>
+            <button type="button" class="submit"onclick="stulogin()">登 录</button>
+            <button type="button" class="fb-btn"onclick="log_bus()">使用 <span>企业合作</span> 帐号登录</button>
+        </form>
+        </div>
+        <div class="sub-cont">
+            <div class="img">
+                <div class="img__text m--up">
+                    <h2>还未注册？</h2>
+                    <p>立即注册，发现更多机会与人才！</p>
+                </div>
+                <div class="img__text m--in">
+                    <h2>已有帐号？</h2>
+                    <p>立即登录！</p>
+                </div>
+                <div class="img__btn">
+                    <span class="m--up">注 册</span>
+                    <span class="m--in">登 录</span>
+                </div>
+            </div>
+            <div class="form sign-up">
+            <form action="" autocomplete="off">
+                <h2>立即注册</h2>
+                <label>
+                    <span style="color: #000000; ">账号</span>
+                    <input type="text" name="name_reg" id="name_reg" /><img src="" style="height: 14px;width: 14px;"><span id = "nametip" >  3~15个中文字符或数字或字母组合</span>
+                </label>
+                <label>
+                    <span style="color: #000000; ">密码</span>
+                    <input type="password" name="pawd_reg" id="pawd_reg" ><span id="pawdtip"> 6~16个字符，区分大小写</span><span id="ruo"style=" display: none;">弱</span><span id="zo" style=" display: none;">中</span><span id="qiang" style=" display: none;">强</span>
+                </label>
+                <label>
+                    <span style="color: #000000; ">确认密码</span>
+                    <input type="password" name="pwd_reg" id="pwd_reg" /><img src="" style="height: 14px;width: 14px;"><span id="pwdtip"> 请再次填写密码</span>
+                </label>
+                <label>
+                    <div class="verify">
+                     <div id="verify_box">
+                        <div id="verify_xbox">
+                            <div id="btn2">
+                                <img class="img1"style=" height: 12px; top: 0;" src="images/lllllll.png"/>
+                            </div>
+                        </div>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;按住滑块，拖动到最右边
+                     </div>
+                    </div>
+                    <h6>请滑动上方滑块验证</h6>
+                </label>
+                <button type="button" class="submit">注 册</button>
+               
+            </form>
+            </div>
+        </div>
+    </div>
+    <a href="adminlogin.html" class="myButton">管理员登录</a>
 </body>
+<script src="../static/js/script.js"></script>
+<script>
+    function log_stu(){
+        document.getElementById("bus_log").style="display:none";
+        document.getElementById("stu_log").style="display:block";
+    }
+    function log_bus(){
+ 
+       document.getElementById("stu_log").style="display:none";
+       document.getElementById("bus_log").style="display:block";
+    }
+    function buslogin(){
+        document.getElementById("zhuan").style.display="block";
+        setTimeout(function(){
+            document.getElementById("zhuan").style.display="none";
+        },2000)
+    }
+    function stulogin(){
+        document.getElementById("zhuan").style.display="block";
+        setTimeout(function(){
+            document.getElementById("zhuan").style.display="none";
+        },2000)
+    }
+</script>
 </html>
