@@ -146,6 +146,7 @@ public class AdminInfoController {
                         stu.setHometown(map.get("hometown"));
                         stu.setPoliticalStatus(map.get("political"));
                         studentInfoService.save(stu);
+
                     }
                 }
         ).start();
