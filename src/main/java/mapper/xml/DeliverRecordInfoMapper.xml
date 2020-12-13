@@ -12,7 +12,7 @@
     </select>
     <resultMap id="listDeliverRecordInfoWithJobNameAndCompanyNameResultMap" type="pojo.DeliverRecordInfo">
         <id column="deliver_id" property="deliverId"></id>
-        <result column="status" property="deliverStatus"></result>
+        <result column="status" property="status"></result>
         <result column="resume_id" property="resumeId"></result>
         <association property="jobInfo" javaType="pojo.JobInfo">
             <id column="job_id" property="jobId"></id>
@@ -22,6 +22,7 @@
                 <result column="company_name" property="companyName"></result>
             </association>
         </association>
+    </resultMap>
 
     <select id="getDeliverRecordBySnameCid" resultMap="selectDR">
         select deliver_id,d.job_id,d.resume_id,d.create_time,d.status,

@@ -127,32 +127,33 @@ public class StudentInfoController {
     }
     @RequestMapping("/getJobs")
     @ResponseBody
-    public String getJobs(HttpSession session, @RequestBody GetJobsRequestBody getJobsRequestBody){
+    public String getJobs(HttpSession session, HttpServletRequest request){
         //String studentId = (String) session.getAttribute("studentId");
         String studentId = "2220172361";
-        String companyName = getJobsRequestBody.getCompanyName();
-        String jobName = getJobsRequestBody.getJobName();
-        String jobType = getJobsRequestBody.getJobType();
+        String companyName = request.getParameter("companyName");
+        String jobName = request.getParameter("jobName");
+        String jobType = request.getParameter("jobType");
+        //test
         System.out.println(companyName);
         System.out.println(jobName);
         System.out.println(jobType);
         //设置分页器
         int current = 1;
         int size = 20;
-        IPage<JobInfo> jobInfoIPage = new Page<>(current,size);
+        Page<JobInfo> jobInfoIPage = new Page<>(current,size);
         //设置查询条件
         QueryWrapper<JobInfo> wrapper = new QueryWrapper<>();
-        if (!companyName.equals("")) {
+        if (companyName != null && !companyName.trim().equals("")) {
             wrapper.like("company_name",companyName);
         }
-        if (!jobName.equals("")) {
+        if (jobName != null && !jobName.trim().equals("")) {
             wrapper.like("job_name",jobName);
         }
-        if (!jobType.equals("")) {
+        if (jobType != null && !jobType.trim().equals("")) {
             wrapper.eq("job_type",jobType);
         }
         //执行查询
-        List<JobInfo> jobInfos = jobInfoService.listJobsWithCompanyName(wrapper);
+        List<JobInfo> jobInfos = jobInfoService.listJobsWithCompanyName(jobInfoIPage, wrapper).getRecords();
         //返回结果
         return new RestResult()
                 .setCode(ResultCode.SUCCESS)
@@ -164,9 +165,9 @@ public class StudentInfoController {
     public String getDeliverRecord(HttpSession session){
         //String studentId = (String) session.getAttribute("studentId");
         String studentId = "2220172361";
+        //设置分页器
         int current = 1;
         int size = 20;
-        //设置分页器
         IPage<DeliverRecordInfo> deliverRecordInfoIPage = new Page<>(current,size);
         //设置查询条件的wrapper
         QueryWrapper<DeliverRecordInfo> deliverRecordInfoWrapper = new QueryWrapper<>();

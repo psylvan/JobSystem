@@ -48,7 +48,7 @@ public class JobInfoController {
         return new RestResult().setCode(ResultCode.FAIL).setMessage("职位已存在").toString();
     }
 
-    @RequestMapping("/addJob")
+    @RequestMapping("/removeJob")
     @ResponseBody
     public String removeJob(HttpServletRequest request){
         String jobId=request.getParameter("jobId");
