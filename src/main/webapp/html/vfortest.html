@@ -9,6 +9,8 @@
         <ul>
             <li v-for="resume in myResumes">
                 <p>简历id：{{resume.resumeId}}</p>
+                <p>简历名称：{{resume.resumeName}}</p>
+                <button type="button" @click="doPreviewResume">查看</button>
             </li>
         </ul>
     </div>
@@ -32,7 +34,7 @@
             <input type="text" v-model="jobName">
             <input type="text" v-model="companyName">
             <input type="text" v-model="jobType">
-            <button type="button" v-on:click="searchJobs">搜索</button>
+            <button type="button" @:click="searchJobs">搜索</button>
         </form>
     </div>
     <div id="jobContainer">
@@ -49,7 +51,7 @@
             <li v-for="deliverRecord in deliverRecords">
                 <p>公司名称：{{deliverRecord.jobInfo.companyInfo.companyName}}</p>
                 <p>职位名称：{{deliverRecord.jobInfo.jobName}}</p>
-                <p>投递状态：{{deliverRecord.deliverStatus}}</p>
+                <p>投递状态：{{deliverRecord.status}}</p>
             </li>
         </ul>
     </div>
@@ -76,6 +78,9 @@
                     },function (err){
 
                     })
+                },
+                doPreviewResume: function (){
+
                 }
             },
             mounted(){
@@ -93,11 +98,11 @@
             methods: {
                 searchJobs: function (){
                     var that = this;
-                    axios.post('http://localhost:8080/Job/getJobs',{
-                            jobName: that.jobName,
-                            companyName: that.companyName,
-                            jobType: that.jobType
-                    }).then(function (response){
+                    var param = new URLSearchParams();
+                    param.append("jobName",this.jobName);
+                    param.append("companyName",this.companyName);
+                    param.append("jobType",this.jobType);
+                    axios.post('http://localhost:8080/Job/getJobs',param).then(function (response){
                         var data = JSON.parse(response.data).data;
                         jobContainer.displayJobs(data);
                     },function (err){

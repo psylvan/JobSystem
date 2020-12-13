@@ -2,6 +2,7 @@ package service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -29,8 +30,8 @@ public class JobInfoServiceImpl extends ServiceImpl<JobInfoMapper, JobInfo> impl
 
     @Autowired
     JobInfoMapper jobInfoMapper;
-    public List<JobInfo> listJobsWithCompanyName(Wrapper wrapper){
-        return jobInfoMapper.listJobsWithCompanyName(wrapper);
+    public IPage<JobInfo> listJobsWithCompanyName(Page<JobInfo> page, Wrapper wrapper){
+        return jobInfoMapper.listJobsWithCompanyName(page, wrapper);
     }
     @Override
     public String getJobs(String companyId,int current,int size) {
