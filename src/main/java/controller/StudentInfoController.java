@@ -139,20 +139,20 @@ public class StudentInfoController {
         //设置分页器
         int current = 1;
         int size = 20;
-        IPage<JobInfo> jobInfoIPage = new Page<>(current,size);
+        Page<JobInfo> jobInfoIPage = new Page<>(current,size);
         //设置查询条件
         QueryWrapper<JobInfo> wrapper = new QueryWrapper<>();
-        if (!companyName.equals("")) {
+        if (companyName != null && !companyName.trim().equals("")) {
             wrapper.like("company_name",companyName);
         }
-        if (!jobName.equals("")) {
+        if (jobName != null && !jobName.trim().equals("")) {
             wrapper.like("job_name",jobName);
         }
-        if (!jobType.equals("")) {
+        if (jobType != null && !jobType.trim().equals("")) {
             wrapper.eq("job_type",jobType);
         }
         //执行查询
-        List<JobInfo> jobInfos = jobInfoService.listJobsWithCompanyName(wrapper);
+        List<JobInfo> jobInfos = jobInfoService.listJobsWithCompanyName(jobInfoIPage, wrapper).getRecords();
         //返回结果
         return new RestResult()
                 .setCode(ResultCode.SUCCESS)
@@ -166,7 +166,6 @@ public class StudentInfoController {
 //        String studentId = "2220172361";
         int current = 1;
         int size = 20;
-        //设置分页器
         IPage<DeliverRecordInfo> deliverRecordInfoIPage = new Page<>(current,size);
         //设置查询条件的wrapper
         QueryWrapper<DeliverRecordInfo> deliverRecordInfoWrapper = new QueryWrapper<>();
