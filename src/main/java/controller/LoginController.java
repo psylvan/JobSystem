@@ -38,7 +38,7 @@ public class LoginController {
                 result.setCode(ResultCode.FAIL).setMessage("用户不存在");
             else if (stu.getPassword().equals(password)) {
                 session.setAttribute("user", userId);
-                session.setAttribute("useName",stu.getStudentName());
+                session.setAttribute("userName",stu.getStudentName());
                 result.setCode(ResultCode.SUCCESS).setMessage("验证成功");
             } else {
                 result.setCode(ResultCode.FAIL).setMessage("密码错误");
