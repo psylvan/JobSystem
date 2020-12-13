@@ -60,8 +60,8 @@ public class StudentInfoController {
     @RequestMapping("/getMyInfo")//请求路径（ajax接口）
     @ResponseBody
     public String getStudentInfo(HttpSession session){
-        String studentId = (String) session.getAttribute("user");
-//        String studentId = "2220172361";
+        //String studentId = (String) session.getAttribute("user");
+        String studentId = "2220172361";
         StudentInfo student = studentInfoService.getById(studentId);
         return new RestResult()
                 .setCode(ResultCode.SUCCESS)
