@@ -72,8 +72,8 @@ public class StudentInfoController {
     @RequestMapping("/getMyResumes")
     @ResponseBody
     public String getStudentResumes(HttpSession session){
-        String studentId = (String) session.getAttribute("user");
-//        String studentId = "2220172361";
+//        String studentId = (String) session.getAttribute("user");
+        String studentId = "2220172361";
         //存放查询结果的list
         List<ResumeInfo> resumeInfos;
         //设置查询条件的wrapper

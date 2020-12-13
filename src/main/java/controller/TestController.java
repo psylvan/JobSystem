@@ -22,7 +22,9 @@ import util.json.RestResult;
 import util.json.ResultCode;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +61,11 @@ public class TestController {
         String[] values = request.getParameterValues("list[]");
         System.out.println(Arrays.asList(values));
         return null;
+    }
+
+    @RequestMapping("/welcome")
+    public void t6(HttpServletResponse response) throws IOException {
+        response.sendRedirect("html/index.html");
     }
 
     @Autowired
