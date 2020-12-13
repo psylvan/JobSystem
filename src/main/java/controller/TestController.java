@@ -23,7 +23,9 @@ import util.json.ResultCode;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class TestController {
@@ -45,6 +47,18 @@ public class TestController {
     @RequestMapping("/t3")
     public String t3(String studentName){
         return deliverRecordInfoService.getDeliverRecordBySnameCid(0,5,studentName,"123");
+    }
+
+    @RequestMapping("/t4")
+    public String t4(@RequestBody List<Map> parmaMap){
+        System.out.println(parmaMap);
+        return null;
+    }
+//    @RequestMapping("/t4")
+    public String t5(HttpServletRequest request){
+        String[] values = request.getParameterValues("list[]");
+        System.out.println(Arrays.asList(values));
+        return null;
     }
 
     @Autowired

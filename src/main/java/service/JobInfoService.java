@@ -1,6 +1,8 @@
 package service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import pojo.JobInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,7 +18,7 @@ import java.util.List;
  */
 public interface JobInfoService extends IService<JobInfo> {
 
-    public List<JobInfo> listJobsWithCompanyName(Wrapper wrapper);
+    public IPage<JobInfo> listJobsWithCompanyName(Page<JobInfo> page, Wrapper wrapper);
     public boolean insertJob(JobInfo job);
     public void deleteJobById(String jobId);
 

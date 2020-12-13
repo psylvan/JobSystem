@@ -85,8 +85,8 @@ public class CompanyInfoController {
 
     @RequestMapping("/getMyJobs")
     public String getCompanyJobs(HttpSession session,int current,int size){
-//        String companyId = (String) session.getAttribute("user");
-        String companyId = "123";
+        String companyId = (String) session.getAttribute("user");
+//        String companyId = "123";
         return jobInfoService.getJobs(companyId, current, size);
 
     }
