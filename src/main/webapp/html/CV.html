@@ -165,22 +165,10 @@ vertical-align: middle;
            <div class="col-md-9"style="border-left:1px dashed #000;height:600px">
              <div class="row"><button class="myButton pull-right"><i class="glyphicon glyphicon-edit"></i> 添加个人简历</button></div><br>
              <div class="row">
-                <table class="table table-hover">
-                    <tr><td>1</td>
-                    <td>2</td>
-                    <td>3</td></tr>
-                    <tr><td>1</td>
-                      <td>2</td>
-                      <td>3</td></tr>
-                    <tr><td>1</td>
-                      <td>2</td>
-                      <td>3</td></tr>
-                    <tr><td>1</td>
-                      <td>2</td>
-                      <td>3</td></tr>
-                    <tr><td>1</td>
-                      <td>2</td>
-                      <td>3</td></tr>
+                <table class="table table-hover" id="resumeTable">
+                    <tr><td>简历名称</td>
+                    <td>投递时间</td>
+                    <td>操作</td></tr>
                   </table>
              </div>
            </div>
@@ -237,5 +225,21 @@ function AddZero(n){
 	}
 	return ''+n;
 }
+
+$.post("/Job/getMyResumes",function (result) {
+    list = JSON.parse(result).data;
+    console.log(list);
+    var s = '';
+    for(let i=0; i<list.length; i++){
+        const e = list[i];
+        console.log(e);
+        s+= '<tr>'+
+            '<td>'+e.resumeName+'</td>' +
+            '<td>'+e.createTime+'</td>' +
+            '<td><button>删除</button><button>查看</button></td>'
+            +'</tr>';
+    }
+    $('#resumeTable').html($('#resumeTable').html()+s);
+})
 </script>
 </html>
