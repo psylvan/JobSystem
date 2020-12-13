@@ -24,7 +24,6 @@ import javax.servlet.http.HttpSession;
  * @since 2020-12-06
  */
 @Controller
-//@RequestMapping("/jobInfo")
 public class JobInfoController {
     @Autowired
     private JobInfoService jobInfoService;

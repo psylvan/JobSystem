@@ -1,12 +1,11 @@
 package controller;
 
 
+import mapper.StudentInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 import pojo.AdminInfo;
 import pojo.CompanyInfo;
 import pojo.StudentInfo;
@@ -17,8 +16,9 @@ import util.json.RestResult;
 import util.json.ResultCode;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 import pojo.CompanyInfo;
 import pojo.StudentInfo;
 import service.AdminInfoService;
@@ -27,7 +27,13 @@ import service.StudentInfoService;
 import util.json.RestResult;
 import util.json.ResultCode;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -48,50 +54,7 @@ public class AdminInfoController {
     @Autowired
     private AdminInfoService adminInfoService;
 
-    @RequestMapping("/doLogin")
-    public String doLogin(String userId, String password, int identity, HttpSession session) {
-        RestResult result = new RestResult();
-        //学生
-        if (identity == 1) {
-            StudentInfo stu = studentInfoService.getById(userId);
-            if (stu == null)
-                result.setCode(ResultCode.FAIL).setMessage("用户不存在");
-            else if (stu.getPassword().equals(password)) {
-                session.setAttribute("user", userId);
-                result.setCode(ResultCode.SUCCESS).setMessage("验证成功");
-            } else {
-                result.setCode(ResultCode.FAIL).setMessage("密码错误");
-            }
-        }
-        //企业
-        else if (identity == 2) {
-            CompanyInfo user = companyInfoService.getById(userId);
-            if (user == null)
-                result.setCode(ResultCode.FAIL).setMessage("用户不存在");
-            else if (user.getPassword().equals(password)) {
-                session.setAttribute("user", userId);
-                result.setCode(ResultCode.SUCCESS).setMessage("验证成功");
-            } else {
-                result.setCode(ResultCode.FAIL).setMessage("密码错误");
-            }
-        }
-        //管理员
-        else {
-            AdminInfo user = adminInfoService.getById(userId);
-            if (user == null)
-                result.setCode(ResultCode.FAIL).setMessage("用户不存在");
-            else if (user.getPassword().equals(password)) {
-                session.setAttribute("user", userId);
-                result.setCode(ResultCode.SUCCESS).setMessage("验证成功");
-            } else {
-                result.setCode(ResultCode.FAIL).setMessage("密码错误");
-            }
-        }
-        return result.toString();
-    }
 
-    //    @Autowired
-//    private StudentInfoService studentInfoService;
     @RequestMapping("/showUnsolved")
     @ResponseBody
     public String getUnsolvedCompany() {
@@ -136,6 +99,58 @@ public class AdminInfoController {
             return new RestResult().setCode(ResultCode.SUCCESS).setMessage("已通过").setData(companyInfo).toString();
         }
         return new RestResult().setCode(ResultCode.SUCCESS).setMessage("未通过").toString();
+    }
+
+    @RequestMapping("/download")
+    @ResponseBody
+    public String downloads(HttpServletResponse response , HttpServletRequest request) throws Exception{
+        //要下载的地址
+        String  path = request.getRealPath("/downloads");
+        String  fileName = "模板.xlsx";
+        System.out.println(path);
+        //1、设置response 响应头
+        response.reset(); //设置页面不缓存,清空buffer
+        response.setCharacterEncoding("UTF-8"); //字符编码
+        response.setContentType("multipart/form-data"); //二进制传输数据
+        //设置响应头
+        response.setHeader("Content-Disposition", "attachment;fileName="+ URLEncoder.encode(fileName, "UTF-8"));
+
+        File file = new File(path,fileName);
+        //2、 读取文件--输入流
+        InputStream input=new FileInputStream(file);
+        //3、 写出文件--输出流
+        OutputStream out = response.getOutputStream();
+
+        byte[] buff =new byte[1024];
+        int index=0;
+        //4、执行 写出操作
+        while((index= input.read(buff))!= -1){
+            out.write(buff, 0, index);
+            out.flush();
+        }
+        out.close();
+        input.close();
+        return null;
+    }
+
+    @RequestMapping("/uploadStudent")
+    public String uploadStudent(@RequestBody List<Map> parmaMap){
+        new Thread(
+                ()->{
+                    for(Map<String,String> map : parmaMap){
+                        StudentInfo stu = new StudentInfo();
+                        stu.setStudentId(map.get("id"));
+                        stu.setPassword(map.get("password"));
+                        stu.setStudentName(map.get("name"));
+                        stu.setSex(map.get("sex").equals("男")?1:0);
+                        stu.setHometown(map.get("hometown"));
+                        stu.setPoliticalStatus(map.get("political"));
+                        studentInfoService.save(stu);
+
+                    }
+                }
+        ).start();
+        return new RestResult().setCode(ResultCode.SUCCESS).setMessage("添加成功").toString();
     }
 }
 

@@ -2,14 +2,11 @@ package service.impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.toolkit.Constants;
-import org.apache.ibatis.annotations.Param;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import pojo.DeliverRecordInfo;
 import mapper.DeliverRecordInfoMapper;
-import pojo.ResumeInfo;
 import service.DeliverRecordInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -32,9 +29,9 @@ import java.util.List;
  */
 @Service
 public class DeliverRecordInfoServiceImpl extends ServiceImpl<DeliverRecordInfoMapper, DeliverRecordInfo> implements DeliverRecordInfoService {
-      @Autowired
-    private DeliverRecordInfoMapper deliverRecordInfoMapper;  
-  public List<DeliverRecordInfo> listDeliverRecordInfoWithJobNameAndCompanyName(Wrapper wrapper){
+    @Autowired
+    private DeliverRecordInfoMapper deliverRecordInfoMapper;
+    public List<DeliverRecordInfo> listDeliverRecordInfoWithJobNameAndCompanyName(Wrapper wrapper){
         return deliverRecordInfoMapper.listDeliverRecordInfoWithJobNameAndCompanyName(wrapper);
     }
 
@@ -72,6 +69,23 @@ public class DeliverRecordInfoServiceImpl extends ServiceImpl<DeliverRecordInfoM
             restResult.setMessage("已发送拒用");
         }
         deliverRecordInfoMapper.updateById(recordInfo);
+        return restResult.toString();
+    }
+
+    @Override
+    public String commitOffer(String deliverId, boolean flag) {
+        RestResult restResult = new RestResult();
+        DeliverRecordInfo recordInfo = deliverRecordInfoMapper.selectById(deliverId);
+        if(recordInfo.getStatus()!=DeliverRecordInfo.ADOPTED){
+            return restResult.setCode(ResultCode.FAIL).setMessage("企业未发放offer").toString();
+        }
+        if(flag==true){
+            recordInfo.setStatus(DeliverRecordInfo.ACCEPTED);
+            restResult.setCode(ResultCode.SUCCESS).setMessage("已接受offer");
+        }else{
+            recordInfo.setStatus(DeliverRecordInfo.UNACCEPTED);
+            restResult.setCode(ResultCode.SUCCESS).setMessage("已拒绝offer");
+        }
         return restResult.toString();
     }
 }
