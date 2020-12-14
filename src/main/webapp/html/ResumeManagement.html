@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.14.1/lib/theme-chalk/index.css">
+    <title>就业管理系统-简历维护</title>
+    <style>
+        html,body{
+            height: 100%;
+            margin: 0;
+        }
+        #app{
+            height: 100%;
+        }
+        .el-container{
+            height: 100%;
+        }
+        .el-header{
+            background: #011e2c;
+        }
+        .el-aside{
+            height: 100%;
+            background: #011e2c;
+        }
+        .el-menu{
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header>
+            <h3 style="color: white;">就业管理系统</h3>
+        </el-header>
+        <el-container>
+            <el-aside width="20%">
+                <el-container>
+                    <el-main>
+                        <el-menu default-active="2"  background-color="#011e2c"
+                                 text-color="#fff" active-text-color="#ffd04b">
+                            <el-menu-item index="1">
+                                <i class="el-icon-user-solid"></i>
+                                <span slot="title">个人信息</span>
+                            </el-menu-item>
+                            <el-menu-item index="2" @click="gotoResumesManagement">
+                                <i class="el-icon-s-management"></i>
+                                <span slot="title">简历维护</span>
+                            </el-menu-item>
+                            <el-menu-item index="3">
+                                <i class="el-icon-search"></i>
+                                <span slot="title">职位查询</span>
+                            </el-menu-item>
+                            <el-menu-item index="4" >
+                                <i class="el-icon-stopwatch"></i>
+                                <span slot="title">投递记录</span>
+                            </el-menu-item>
+                        </el-menu>
+                    </el-main>
+                    <el-footer>
+                        <p style="color: white">@copyright 560 2020-12</p>
+                    </el-footer>
+                </el-container>
+            </el-aside>
+            <el-main>
+
+            </el-main>
+        </el-container>
+    </el-container>
+</div>
+<!-- Vue -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- 引入Element组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<!-- 引入axios -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app'
+    })
+</script>
+</body>
+</html>

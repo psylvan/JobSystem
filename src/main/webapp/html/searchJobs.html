@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>就业管理系统-查找职位</title>
+
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.14.1/lib/theme-chalk/index.css">
+    <style>
+        html,body{
+            height: 100%;
+            margin: 0;
+        }
+        #app{
+            height: 100%;
+        }
+        .el-container{
+            height: 100%;
+        }
+        .el-header{
+            background: #011e2c;
+        }
+        .el-aside{
+            height: 100%;
+            background: #011e2c;
+        }
+        .el-menu{
+            border: 0;
+        }
+    </style>
+</head>
+
+<body>
+<div id="app" style="height: 100%;">
+        <el-container>
+            <el-header style="background: #011e2c;">
+                <h3 style="color: white;">就业管理系统</h3>
+            </el-header>
+            <el-container>
+                <el-aside width="20%">
+                    <el-container>
+                        <el-main>
+                            <el-menu default-active="3"  background-color="#011e2c"
+                                     text-color="#fff" active-text-color="#ffd04b">
+                                <el-menu-item index="1">
+                                    <i class="el-icon-user-solid"></i>
+                                    <span slot="title">个人信息</span>
+                                </el-menu-item>
+                                <el-menu-item index="2" @click="gotoResumesManagement">
+                                    <i class="el-icon-s-management"></i>
+                                    <span slot="title">简历维护</span>
+                                </el-menu-item>
+                                <el-menu-item index="3">
+                                    <i class="el-icon-search"></i>
+                                    <span slot="title">职位查询</span>
+                                </el-menu-item>
+                                <el-menu-item index="4" >
+                                    <i class="el-icon-stopwatch"></i>
+                                    <span slot="title">投递记录</span>
+                                </el-menu-item>
+                            </el-menu>
+                        </el-main>
+                        <el-footer>
+                            <p style="color: white">@copyright 560 2020-12</p>
+                        </el-footer>
+                    </el-container>
+                </el-aside>
+                <el-main>
+                    <div>
+                        <p>学号{{studentId}}</p>
+                        <p>姓名{{studentName}}</p>
+                    </div>
+                    <hr>
+                    <div>
+                        <el-row>
+                            <el-col :span="3">
+                                <el-input v-model="companyName" placeholder="公司名称"></el-input>
+                            </el-col>
+                            <el-col :span="3">
+                                <el-input v-model="jobName" placeholder="职位名称"></el-input>
+                            </el-col>
+                            <el-col :span="3">
+                                <el-select v-model="jobType" placeholder="职业类型">
+                                    <el-option
+                                            v-for="item in jobTypeOptions"
+                                            :key="item.index"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-col>
+                            <el-col :span="3" :offset="12">
+                                <el-button type="primary" icon="el-icon-search" @click="searchJobs">搜索</el-button>
+                            </el-col>
+                        </el-row>
+                    </div>
+                    <div>
+                        <el-table  :data="tableData" stripe style="width: 100%">
+                            <el-table-column prop="companyInfo.companyName" label="公司名称" width="180">
+                            </el-table-column>
+                            <el-table-column prop="jobName" label="职位名称" width="180">
+                            </el-table-column>
+                            <el-table-column prop="jobType" label="职位类型">
+                            </el-table-column>
+                        </el-table>
+                    </div>
+                </el-main>
+            </el-container>
+        </el-container>
+</div>
+<!-- Vue -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- 引入Element组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<!-- 引入axios -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    var appStyleSheet = new Vue({
+        el: '#app',
+        data: {
+            studentId: '',
+            studentName: '',
+            jobName:'',
+            companyName:'',
+            jobType:'',
+            jobTypeOptions:[{
+                value: '前端',
+                label: '前端'
+            },{
+                value: '后端',
+                label: '后端'
+            },{
+                value: '测试',
+                label: '测试'
+            },{
+                value: '运营',
+                label: '运营'
+            }],
+            tableData: [{
+                date: '2016-05-02',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄',
+            }, {
+                date: '2016-05-04',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-01',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄',
+            }, {
+                date: '2016-05-03',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }]
+        },
+        methods: {
+            initfn: function(){
+                var that = this;
+                axios.get('http://localhost:8080/Job/getMyInfo').then(function(response){
+                    var data = JSON.parse(response.data).data;
+                    console.log(data);
+                    that.studentId = data.studentId;
+                    that.studentName = data.studentName;
+                },function(err){
+
+                });
+                axios.post('http://localhost:8080/Job/getJobs',{
+                    jobName: that.jobName,
+                    jobType: that.jobType,
+                    companyName: that.companyName
+                }).then(function (response){
+                    var data = JSON.parse(response.data).data;
+                    console.log(data);
+                    that.tableData = data;
+                },function (err){
+
+                })
+            },
+            gotoResumesManagement: function (){
+              window.location.href = 'http://localhost:8080/Job/html/ResumeManagement.html';
+            },
+            searchJobs: function (){
+                var that = this;
+                axios.post('http://localhost:8080/Job/getJobs',{
+                    jobName: that.jobName,
+                    jobType: that.jobType,
+                    companyName: that.companyName
+                }).then(function (response){
+                    var data = JSON.parse(response.data).data;
+                    console.log(data);
+                    that.tableData = data;
+                },function (err){
+
+                })
+            }
+        },
+        mounted(){
+            this.initfn();
+        }
+    })
+
+</script>
+</body>
+
+</html>
