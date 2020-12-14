@@ -17,6 +17,7 @@ import service.DeliverRecordInfoService;
 import service.JobInfoService;
 import service.ResumeInfoService;
 import util.json.RestResult;
+import util.json.ResultCode;
 
 import javax.print.attribute.standard.JobMediaSheets;
 import javax.servlet.http.HttpServletRequest;
@@ -85,10 +86,17 @@ public class CompanyInfoController {
 
     @RequestMapping("/getMyJobs")
     public String getCompanyJobs(HttpSession session,int current,int size){
-        String companyId = (String) session.getAttribute("user");
-//        String companyId = "123";
+//        String companyId = (String) session.getAttribute("user");
+        String companyId = "123";
         return jobInfoService.getJobs(companyId, current, size);
 
+    }
+    @RequestMapping("/getCompanyInfo")
+    public String getInfo(HttpSession session){
+//        String companyId = (String) session.getAttribute("users");
+        String companyId = "123";
+        CompanyInfo info = companyInfoService.getById(companyId);
+        return new RestResult().setCode(ResultCode.SUCCESS).setData(info).toString();
     }
 }
 
