@@ -60,6 +60,31 @@
                 </el-container>
             </el-aside>
             <el-main>
+                <!-- Form -->
+                <el-button type="success" @click="dialogFormVisible = true">添加岗位</el-button>
+
+                <el-dialog title="岗位信息" :visible.sync="dialogFormVisible">
+                    <el-form :model="form">
+                        <el-form-item label="岗位名称" :label-width="formLabelWidth">
+                            <el-input v-model="form.jobName" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="岗位描述" :label-width="formLabelWidth">
+                            <el-input v-model="form.jobDescription" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="岗位类型" :label-width="formLabelWidth">
+                            <el-select v-model="form.jobType" placeholder="岗位类型">
+                                <el-option label="后端开发" value="后端开发"></el-option>
+                                <el-option label="前端开发" value="前端开发"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="dialogFormVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="submitJob">确 定</el-button>
+                    </div>
+                </el-dialog>
+
+                <hr>
                 <el-table :data="tableData">
                     <el-table-column prop="jobName" label="岗位名称" width="180">
                     </el-table-column>
@@ -67,11 +92,9 @@
                     </el-table-column>
                     <el-table-column prop="jobDescription" label="岗位描述" width="180">
                     </el-table-column>
-                    <el-table-column
-                            label="操作"
-                            width="100">
+                    <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
-                            <el-button @click="" type="text" size="small">删除</el-button>
+                            <el-button @click="deleteJob(scope.$index)" type="text" size="small">删除</el-button>
                             <el-button type="text" size="small">编辑</el-button>
                         </template>
                     </el-table-column>
@@ -99,11 +122,17 @@
     var app = new Vue({
         el: '#app',
         data: {
-            jobId: '',
             tableData: [],
             current: 0,
-            size: 1,
-            total: 2
+            size: 5,
+            total: 0,
+            dialogFormVisible: false,
+            form: {
+                jobName: '',
+                jobDescription: '',
+                jobType: '',
+            },
+            formLabelWidth: '120px'
         },
         methods: {
             initfun: function () {
@@ -116,8 +145,9 @@
                     var data = JSON.parse(reponse.data).data;
                     console.log(data);
                     that.tableData = data;
-                    that.total = data[0].total;
-                    console.log(that.total);
+                    if(data.length>0){
+                        that.total = data[0].total;
+                    }
                 },function (err) {
 
                 });
@@ -133,13 +163,44 @@
                         var data = JSON.parse(reponse.data).data;
                         console.log(data);
                         that.tableData = data;
-                        that.total = data[0].total;
-                        console.log(that.total);
                     },function (err) {
 
                     }
                 );
-            } 
+            } ,
+            submitJob: function () {
+                var that = this;
+                var params = new URLSearchParams();
+                params.append('jobName', that.form.jobName);
+                params.append('jobType', that.form.jobType);
+                params.append('jobDescription', that.form.jobDescription);
+                that.tableData.push({'jobName':that.form.jobName,'jobType':that.form.jobType,'jobDescription':that.form.jobDescription});
+                this.dialogFormVisible = false;
+                axios.post("/Job/addJob", params)
+                    .then(function (reponse) {
+                        var data = JSON.parse(reponse.data).data;
+                        console.log(data);
+                    }, function (err) {
+
+                    }
+                );
+            },
+            deleteJob: function (index) {
+                var jobId = this.tableData[index].jobId;
+                this.tableData.splice(index,1);
+                var that = this;
+                var params = new URLSearchParams();
+                params.append('jobId', jobId);
+                axios.post("/Job/removeJob", params)
+                    .then(function (reponse) {
+                            var data = JSON.parse(reponse.data).data;
+                            console.log(data);
+                        }, function (err) {
+
+                        }
+                    );
+
+            }
         },
         mounted(){
             this.initfun();
