@@ -19,8 +19,10 @@ import java.util.List;
  */
 public interface AdminInfoService extends IService<AdminInfo> {
     public List<CompanyInfo> selectUnsolvedCompany(String companyName, Integer status);
-    public List<CompanyInfo> selectUnsolvedCompany(Integer status);
+    public String selectUnsolvedCompany(Integer status,int current,int size);
     public List<StudentInfo> selectAllStudent();
     public boolean insertStudent(StudentInfo stu);
     public CompanyInfo updateCompany(String companyId);
+    public CompanyInfo rejectCompany(String companyId);
+    public CompanyInfo searchCompany(String companyId);
 }
