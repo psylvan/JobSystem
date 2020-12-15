@@ -62,6 +62,7 @@
                         action=""
                         :auto-upload="false"
                         :file-list="fileList"
+                        :on-change="handleChange"
                         >
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">将文件拖到此处</em></div>
@@ -78,6 +79,10 @@
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <!-- 引入axios -->
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script type="text/javascript" src="../static/js/xlsx.core.min.js"></script>
+
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
 <script>
     var app = new Vue({
         el: '#app',
@@ -90,7 +95,7 @@
             tableData:[],
             companyData:[],
             flag:"",
-            fileList:[],
+            file: File
         },
         methods:{
             initfn:function () {
@@ -118,8 +123,74 @@
                     // window.location.href="/Job/company/"+companyId+"/false";
                 });
             },
+            handleChange: function (file,fileList){
+                this.file = fileList[0].raw;
+            },
             submitUpload: function(){
-                console.log(this.fileList);
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var data = e.target.result;
+                    var workbook = XLSX.read(data, {type: 'binary'});
+                    var sheetNames = workbook.SheetNames;
+                    var sheet = workbook.Sheets[sheetNames[0]];
+                    var end = sheet['!ref'].substring(4);
+                    var sheetElement = sheet['A2'];
+                    console.log(sheetElement);
+                    var list = [];
+                    for(var i=2;i<=end;i++){
+                        var stu = {};
+                        stu.id = sheet['A'+''+i].w;
+                        stu.name = sheet['B'+''+i].w;
+                        stu.password = sheet['C'+''+i].w;
+                        stu.sex = sheet['D'+''+i].w;
+                        stu.political = sheet['E'+''+i].w;
+                        stu.hometown = sheet['F'+''+i].w;
+                        list.push(stu)
+                    }
+                    console.log(list);
+                    $.ajax({
+                        url: '/Job/uploadStudent',
+                        type: 'POST',
+                        data: JSON.stringify(list),
+                        dataType:'json',
+                        contentType:'application/json;charset=utf-8',
+                        success: function (data) {
+                        },
+                        error: function (data) {
+                        }
+                    });
+                };
+                reader.readAsBinaryString(this.file);
+            },
+            callback: function(workbook) {
+                var sheetNames = workbook.SheetNames;
+                var sheet = workbook.Sheets[sheetNames[0]];
+                var end = sheet['!ref'].substring(4);
+                var sheetElement = sheet['A2'];
+                console.log(sheetElement);
+                var list = [];
+                for(var i=2;i<=end;i++){
+                    var stu = {};
+                    stu.id = sheet['A'+''+i].w;
+                    stu.name = sheet['B'+''+i].w;
+                    stu.password = sheet['C'+''+i].w;
+                    stu.sex = sheet['D'+''+i].w;
+                    stu.political = sheet['E'+''+i].w;
+                    stu.hometown = sheet['F'+''+i].w;
+                    list.push(stu)
+                }
+                console.log(list);
+                $.ajax({
+                    url: 'uploadStudent',
+                    type: 'POST',
+                    data: JSON.stringify(list),
+                    dataType:'json',
+                    contentType:'application/json;charset=utf-8',
+                    success: function (data) {
+                    },
+                    error: function (data) {
+                    }
+                });
             },
             companyInfo:function (index) {
                 var that=this;
