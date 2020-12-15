@@ -3,7 +3,7 @@
 <mapper namespace="mapper.DeliverRecordInfoMapper">
 
     <select id="listDeliverRecordInfoWithJobNameAndCompanyName" resultMap="listDeliverRecordInfoWithJobNameAndCompanyNameResultMap">
-        SELECT deliver_id,status,resume_info.resume_id,job_info.job_id,job_name,company_info.company_id,company_name
+        SELECT deliver_id,status,deliver_record_info.create_time,resume_info.resume_id,job_info.job_id,job_name,company_info.company_id,company_name
         FROM deliver_record_info
         JOIN resume_info ON resume_info.resume_id = deliver_record_info.resume_id
         JOIN job_info ON  job_info.job_id = deliver_record_info.job_id
@@ -13,6 +13,7 @@
     <resultMap id="listDeliverRecordInfoWithJobNameAndCompanyNameResultMap" type="pojo.DeliverRecordInfo">
         <id column="deliver_id" property="deliverId"></id>
         <result column="status" property="status"></result>
+        <result column="create_time" property="createTime"></result>
         <result column="resume_id" property="resumeId"></result>
         <association property="jobInfo" javaType="pojo.JobInfo">
             <id column="job_id" property="jobId"></id>

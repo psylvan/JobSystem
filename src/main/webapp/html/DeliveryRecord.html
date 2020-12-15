@@ -29,10 +29,13 @@
         .el-upload,.el-upload-dragger{
             width: 100%;
         }
+        [v-clock]{
+            display: none;
+        }
     </style>
 </head>
 <body>
-<div id="app">
+<div id="app" v-clock>
     <el-container>
         <el-header>
             <h3 style="color: white;">就业管理系统</h3>
@@ -133,6 +136,7 @@
                 axios.get('../getRecord').then(function (response){
                     var data = JSON.parse(response.data).data;
                     data.forEach(function (item){
+                        console.log(item);
                         console.log(item.createTime);
                         item.createTime = new Date(item.createTime).toLocaleDateString();
                     });
