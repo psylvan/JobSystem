@@ -78,8 +78,8 @@
                     </el-table-column>
                     <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
-                            <el-button @click="deleteJob(scope.$index)" type="text" size="small">录用</el-button>
-                            <el-button @click="deleteJob(scope.$index)" type="text" size="small">拒用</el-button>
+                            <el-button @click="deleteJob(scope.$index)" v-bind:disabled="disabled" type="text" size="small">录用</el-button>
+                            <el-button @click="deleteJob(scope.$index)" v-bind:disabled="disabled" type="text" size="small">拒用</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -116,6 +116,7 @@
                     deliverStatus: '已投递'
                 }
             ],
+            disabled: false,
             current: 0,
             size: 5,
             total: 0,
@@ -128,6 +129,17 @@
                 params.append('size',this.size);
                 axios.post("/Job/getDeliverRecord",params).then(response=>{
                     var data = JSON.parse(response.data).data;
+                    for(var i=0;i<data.length;i++){
+                        if(data.deliverStatus == '0'){
+                            data.deliverStatus = '已投递';
+                        }
+                        if(data.deliverStatus == '-1'){
+                            data.deliverStatus = '拒用';
+                        }
+                        if(data.deliverStatus == '1'){
+                            data.deliverStatus = '录用';
+                        }
+                    }
                     that.tableData = data;
                 })
             },
