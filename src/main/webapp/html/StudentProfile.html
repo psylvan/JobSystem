@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <!-- 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui@2.14.1/lib/theme-chalk/index.css">
-    <title>就业管理系统-简历维护</title>
+    <title>就业管理系统-个人信息</title>
     <style>
         html,body{
             height: 100%;
@@ -51,7 +51,7 @@
                                 <span slot="title">个人信息</span>
                             </el-menu-item>
                             <el-menu-item index="2">
-                                <i class="el-icon-s-management"></i>
+                                <i class="el-icon-s-management" @click="gotoResumeManagement"></i>
                                 <span slot="title">简历维护</span>
                             </el-menu-item>
                             <el-menu-item index="3" @click="gotoSearchJobs">
@@ -71,35 +71,8 @@
             </el-aside>
             <el-main>
                 <div>
-                    <p>学号{{studentId}}</p>
-                    <p>姓名{{studentName}}</p>
-                </div>
-                <hr>
-                <div>
-                    <el-upload
-                            ref="uploadBar"
-                            drag
-                            action="/Job/uploadResume"
-                            :file-list="fileList"
-                            :auto-upload="false"
-                            multiple>
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">将简历拖到此处，或<em>点击上传</em></div>
-                    </el-upload>
-                    <el-button size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                </div>
-                <div>
-                    <el-table  :data="tableData" stripe style="width: 100%">
-                        <el-table-column prop="resumeName" label="简历名称" width="180">
-                        </el-table-column>
-                        <el-table-column prop="createTime" label="上传时间" width="180">
-                        </el-table-column>
-                        <el-table-column prop="url" label="操作">
-                            <template slot-scope="scopeProp">
-                                <a :href="scopeProp.row.url" target="_blank" class="buttonText">查看</a>
-                            </template>
-                        </el-table-column>
-                    </el-table>
+                    <p>学号：{{studentId}}</p>
+                    <p>姓名：{{studentName}}</p>
                 </div>
             </el-main>
         </el-container>
@@ -111,18 +84,15 @@
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <!-- 引入axios -->
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
 <script>
     var app = new Vue({
         el: '#app',
         data: {
             studentId: '',
             studentName: '',
-            fileList: [],
-            tableData: []
         },
         methods: {
-            initfn: function (){
+            initfn: function(){
                 var that = this;
                 axios.get('../getMyInfo').then(function(response){
                     var data = JSON.parse(response.data).data;
@@ -132,18 +102,9 @@
                 },function(err){
 
                 });
-                axios.get('../getMyResumes').then(function (response){
-                    var data = JSON.parse(response.data).data;
-                    data.forEach(function (item){
-                        item.createTime = new Date(item.createTime).toLocaleDateString();
-                    });
-                    that.tableData = data;
-                },function (err){
-
-                })
             },
-            submitUpload: function (){
-                this.$refs.uploadBar.submit();
+            gotoResumesManagement: function (){
+                window.location.href = 'ResumeManagement.html';
             },
             gotoSearchJobs: function (){
                 window.location.href = 'SearchJobs.html';

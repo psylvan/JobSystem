@@ -90,17 +90,22 @@ public class StudentInfoController {
     @RequestMapping("/uploadResume")
     @ResponseBody
     public String uploadResume(@RequestParam("file") MultipartFile file, HttpServletRequest request){
-        String studentId = (String) request.getSession().getAttribute("user");
-//        String studentId = "2220172361";
-        //String resumeName = (String) request.getParameter("resumeName");
-        String resumeName = "myResume";
+//        String studentId = (String) request.getSession().getAttribute("user");
+        String studentId = "2220172361";
+        String resumeName = file.getOriginalFilename();
         //传输简历pdf文件
         //设置文件存储路径
-        String storagePath = request.getRealPath("/uploads");
+        String storagePath = "/Job/uploads/"+studentId;
+        String realPath = request.getRealPath("/uploads/"+studentId);
+        //如果文件存储路径不存在，则新建
+        File filePath = new File(realPath,resumeName);
+        if(!filePath.getParentFile().exists()){
+            filePath.getParentFile().mkdirs();
+        }
         //判断文件是否为空
         if(!file.isEmpty()){
             try{
-                file.transferTo(new File(storagePath+ File.separator+resumeName));//把文件写入目标文件地址
+                file.transferTo(new File(realPath+ File.separator+resumeName));//把文件写入目标文件地址
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -111,7 +116,7 @@ public class StudentInfoController {
         resumeInfo.setResumeName(resumeName);
         resumeInfo.setResumeStatus(0);//unknow
         resumeInfo.setStudentId(studentId);
-        resumeInfo.setUrl(storagePath+"/"+resumeName+".pdf");
+        resumeInfo.setUrl(storagePath+"/"+resumeName);
         resumeInfoService.save(resumeInfo);
         return new RestResult().setCode(ResultCode.SUCCESS).toString();
     }
@@ -189,6 +194,8 @@ public class StudentInfoController {
     @RequestMapping("/deliverResume")
     @ResponseBody
     public String deliver(String resumeId,String jobId){
+        System.out.println(resumeId);
+        System.out.println(jobId);
         DeliverRecordInfo info = new DeliverRecordInfo();
         info.setJobId(jobId);
         info.setResumeId(resumeId);
