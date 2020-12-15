@@ -50,6 +50,7 @@ public class DeliverRecordInfoServiceImpl extends ServiceImpl<DeliverRecordInfoM
             hs.put("studentName",record.getResumeInfo().getStudentInfo().getStudentName());
             hs.put("time",record.getCreateTime());
             hs.put("resumeId",record.getResumeId());
+            hs.put("deliverStatus",record.getStatus());
             restList.add(hs);
         }
         return new RestResult().setData(restList).setCode(ResultCode.SUCCESS).toString();

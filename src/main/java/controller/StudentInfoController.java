@@ -72,8 +72,8 @@ public class StudentInfoController {
     @RequestMapping("/getMyResumes")
     @ResponseBody
     public String getStudentResumes(HttpSession session){
-//        String studentId = (String) session.getAttribute("user");
-        String studentId = "2220172361";
+        String studentId = (String) session.getAttribute("user");
+//        String studentId = "2220172361";
         //存放查询结果的list
         List<ResumeInfo> resumeInfos;
         //设置查询条件的wrapper
@@ -183,6 +183,17 @@ public class StudentInfoController {
     @ResponseBody
     public String commit(String deliverId,boolean flag){
         return deliverRecordInfoService.commitOffer(deliverId,flag);
+    }
+
+    @RequestMapping("/deliverResume")
+    @ResponseBody
+    public String deliver(String resumeId,String jobId){
+        DeliverRecordInfo info = new DeliverRecordInfo();
+        info.setJobId(jobId);
+        info.setResumeId(resumeId);
+        info.setStatus(DeliverRecordInfo.DELIVERED);
+        deliverRecordInfoService.save(info);
+        return new RestResult().setCode(ResultCode.SUCCESS).setMessage("投递成功").toString();
     }
 }
 

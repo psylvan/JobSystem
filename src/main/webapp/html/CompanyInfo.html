@@ -40,15 +40,15 @@
                     <el-main>
                         <el-menu default-active="1"  background-color="#011e2c"
                                  text-color="#fff" active-text-color="#ffd04b">
-                            <el-menu-item index="1">
+                            <el-menu-item index="1" @click="gotoCompanyInfo">
                                 <i class="el-icon-user-solid"></i>
                                 <span slot="title">公司信息</span>
                             </el-menu-item>
-                            <el-menu-item index="2" @click="gotoResumesManagement">
+                            <el-menu-item index="2" @click="gotoJobManagement">
                                 <i class="el-icon-s-management"></i>
                                 <span slot="title">岗位管理</span>
                             </el-menu-item>
-                            <el-menu-item index="3">
+                            <el-menu-item index="3" @click="gotoCompanyDeliver">
                                 <i class="el-icon-search"></i>
                                 <span slot="title">投递记录</span>
                             </el-menu-item>
@@ -68,7 +68,7 @@
                                 <el-input :disabled="true" placeholder="公司账号"></el-input>
                             </el-col>
                             <el-col :span="5">
-                                <el-input v-model="companyId">{{companyId}}</el-input>
+                                <el-input v-model="companyId" :disabled="true">{{companyId}}</el-input>
                             </el-col>
                     </el-row>
                     <el-row>
@@ -76,7 +76,7 @@
                             <el-input :disabled="true" placeholder="公司名称"></el-input>
                         </el-col>
                         <el-col :span="5">
-                            <el-input v-model="companyName">{{companyName}}</el-input>
+                            <el-input v-model="companyName" :disabled="true">{{companyName}}</el-input>
                         </el-col>
                     </el-row>
                     <el-row>
@@ -84,7 +84,7 @@
                             <el-input :disabled="true" placeholder="公司规模"></el-input>
                         </el-col>
                         <el-col :span="5">
-                            <el-input v-model="companySize">{{companySize}}人</el-input>
+                            <el-input v-model="companySize" :disabled="true">{{companySize}}人</el-input>
                         </el-col>
                     </el-row>
                     <el-row>
@@ -92,7 +92,7 @@
                             <el-input :disabled="true" placeholder="公司地址"></el-input>
                         </el-col>
                         <el-col :span="5">
-                            <el-input v-model="companyLocation">{{companyLocation}}</el-input>
+                            <el-input v-model="companyLocation" :disabled="true">{{companyLocation}}</el-input>
                         </el-col>
                     </el-row>
                     <el-row>
@@ -100,7 +100,7 @@
                             <el-input :disabled="true" placeholder="公司性质"></el-input>
                         </el-col>
                         <el-col :span="5">
-                            <el-input v-model="companyProperty">{{companyProperty}}</el-input>
+                            <el-input v-model="companyProperty" :disabled="true">{{companyProperty}}</el-input>
                         </el-col>
                     </el-row>
                 </div>
@@ -142,6 +142,15 @@
 
                     }
                 )
+            },
+            gotoCompanyInfo: function () {
+                window.location.href='CompanyInfo.html';
+            },
+            gotoJobManagement: function () {
+                window.location.href='JobManagement.html';
+            },
+            gotoCompanyDeliver: function (){
+                window.location.href='CompanyDeliver.html'
             }
         },
         mounted(){
