@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <!-- 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui@2.14.1/lib/theme-chalk/index.css">
-    <title>就业管理系统-简历维护</title>
+    <title>就业管理系统-投递记录</title>
     <style>
         html,body{
             height: 100%;
@@ -41,13 +41,13 @@
             <el-aside width="20%">
                 <el-container>
                     <el-main>
-                        <el-menu default-active="2"  background-color="#011e2c"
+                        <el-menu default-active="4"  background-color="#011e2c"
                                  text-color="#fff" active-text-color="#ffd04b">
                             <el-menu-item index="1">
                                 <i class="el-icon-user-solid"></i>
                                 <span slot="title">个人信息</span>
                             </el-menu-item>
-                            <el-menu-item index="2">
+                            <el-menu-item index="2" @click="gotoResumesManagement">
                                 <i class="el-icon-s-management"></i>
                                 <span slot="title">简历维护</span>
                             </el-menu-item>
@@ -55,7 +55,7 @@
                                 <i class="el-icon-search"></i>
                                 <span slot="title">职位查询</span>
                             </el-menu-item>
-                            <el-menu-item index="4" @click="gotoDeliveryRecord">
+                            <el-menu-item index="4" >
                                 <i class="el-icon-stopwatch"></i>
                                 <span slot="title">投递记录</span>
                             </el-menu-item>
@@ -68,27 +68,34 @@
             </el-aside>
             <el-main>
                 <div>
-                    <p>学号{{studentId}}</p>
-                    <p>姓名{{studentName}}</p>
+                    <p>学号：{{studentId}}</p>
+                    <p>姓名：{{studentName}}</p>
                 </div>
                 <hr>
                 <div>
-                    <el-upload
-                            drag
-                            action="uploads">
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">将简历拖到此处，或<em>点击上传</em></div>
-                    </el-upload>
-                </div>
-                <div>
                     <el-table  :data="tableData" stripe style="width: 100%">
-                        <el-table-column prop="resumeName" label="简历名称" width="180">
+                        <el-table-column prop="jobInfo.companyInfo.companyName" label="公司名称" width="180">
                         </el-table-column>
-                        <el-table-column prop="createTime" label="上传时间" width="180">
+                        <el-table-column prop="jobInfo.jobName" label="职位名称" width="180">
                         </el-table-column>
-                        <el-table-column prop="url" label="操作">
+
+                        <el-table-column prop="createTime" label="投递时间" width="180">
+                        </el-table-column>
+                        <el-table-column prop="status" label="状态" width="180">
                             <template slot-scope="scopeProp">
-                                <a :href="scopeProp.row.url" target="_blank" class="buttonText">查看</a>
+                                <p v-if="scopeProp.row.status==2">已接受offer</p>
+                                <p v-if="scopeProp.row.status==1">企业已发放offer</p>
+                                <p v-if="scopeProp.row.status==0">已投递</p>
+                                <p v-if="scopeProp.row.status==-1">未被企业录用</p>
+                                <p v-if="scopeProp.row.status==-2">已拒绝企业offer</p>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="" label="操作">
+                            <template slot-scope="scopeProp">
+                                <el-button type="primary" size="mini" v-if="scopeProp.row.status==1" @click="handleAcceptOffer">接受offer</el-button>
+                                <el-button type="primary" size="mini" disabled v-else>接受offer</el-button>
+                                <el-button size="mini" v-if="scopeProp.row.status==1" @click="handelRefuseOffer">拒绝offer</el-button>
+                                <el-button size="mini" disabled v-else>拒绝offer</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -123,21 +130,34 @@
                 },function(err){
 
                 });
-                axios.get('../getMyResumes').then(function (response){
+                axios.get('../getRecord').then(function (response){
                     var data = JSON.parse(response.data).data;
                     data.forEach(function (item){
+                        console.log(item.createTime);
                         item.createTime = new Date(item.createTime).toLocaleDateString();
                     });
                     that.tableData = data;
+                    console.log(data);
                 },function (err){
 
                 })
             },
+            handleAcceptOffer: function (index, row){
+                console.log(index, row);
+                axios.get('/commitOffer?deliverId='+row.deliverId+'&flag=true');
+            },
+            handleRefuseOffer: function (index, row){
+                console.log(index, row);
+                axios.get('/commitOffer?deliverId='+row.deliverId+'&flag=false');
+            },
+            gotoStudentInfo: function (){
+                window.location.href = '';
+            },
             gotoSearchJobs: function (){
                 window.location.href = 'SearchJobs.html';
             },
-            gotoDeliveryRecord: function (){
-                window.location.href = 'DeliveryRecord.html'
+            gotoResumesManagement: function (){
+                window.location.href = 'ResumeManagement.html';
             }
         },
         created(){
