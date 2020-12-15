@@ -93,6 +93,7 @@ public class DeliverRecordInfoServiceImpl extends ServiceImpl<DeliverRecordInfoM
             recordInfo.setStatus(DeliverRecordInfo.UNACCEPTED);
             restResult.setCode(ResultCode.SUCCESS).setMessage("已拒绝offer");
         }
+        deliverRecordInfoMapper.updateById(recordInfo);
         return restResult.toString();
     }
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.14.1/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://unpkg.zhimg.com/element-ui@2.14.1/lib/theme-chalk/index.css">
     <title>就业管理系统-学院</title>
     <style>
         html,body{
@@ -69,6 +69,7 @@
                     <div class="el-upload__tip" slot="tip"></div>
                 </el-upload>
                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                <el-button type="primary" @click="download">下载模板</el-button>
             </el-main>
         </el-container>
     </el-container>
@@ -76,9 +77,9 @@
 <!-- Vue -->
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <!-- 引入Element组件库 -->
-<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.zhimg.com/element-ui/lib/index.js"></script>
 <!-- 引入axios -->
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.zhimg.com/axios/dist/axios.min.js"></script>
 
 <script type="text/javascript" src="../static/js/xlsx.core.min.js"></script>
 
@@ -162,35 +163,8 @@
                 };
                 reader.readAsBinaryString(this.file);
             },
-            callback: function(workbook) {
-                var sheetNames = workbook.SheetNames;
-                var sheet = workbook.Sheets[sheetNames[0]];
-                var end = sheet['!ref'].substring(4);
-                var sheetElement = sheet['A2'];
-                console.log(sheetElement);
-                var list = [];
-                for(var i=2;i<=end;i++){
-                    var stu = {};
-                    stu.id = sheet['A'+''+i].w;
-                    stu.name = sheet['B'+''+i].w;
-                    stu.password = sheet['C'+''+i].w;
-                    stu.sex = sheet['D'+''+i].w;
-                    stu.political = sheet['E'+''+i].w;
-                    stu.hometown = sheet['F'+''+i].w;
-                    list.push(stu)
-                }
-                console.log(list);
-                $.ajax({
-                    url: 'uploadStudent',
-                    type: 'POST',
-                    data: JSON.stringify(list),
-                    dataType:'json',
-                    contentType:'application/json;charset=utf-8',
-                    success: function (data) {
-                    },
-                    error: function (data) {
-                    }
-                });
+            download: function(){
+                window.location.href="/Job/download";
             },
             companyInfo:function (index) {
                 var that=this;
