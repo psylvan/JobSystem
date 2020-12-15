@@ -40,13 +40,13 @@
         </if>
 
     </select>
-    <resultMap id="selectDR" type="pojo.DeliverRecordInfo" >
+    <resultMap id="selectDR" type="pojo.DeliverRecordInfo" autoMapping="true">
         <id property="deliverId" column="deliver_id"/>
         <result property="jobId" column="job_id"/>
         <result property="resumeId" column="resume_id"/>
         <result property="createTime" column="create_time"/>
         <result property="status" column="status"/>
-        <association property="resumeInfo" javaType="pojo.ResumeInfo">
+        <association property="resumeInfo" javaType="pojo.ResumeInfo" autoMapping="true">
             <id property="resumeId" column="r.resume_id"/>
             <result property="resumeName" column="resume_name"/>
             <result property="studentId" column="student_id"/>

@@ -1,6 +1,7 @@
 package controller;
 
 
+import mapper.CompanyInfoMapper;
 import mapper.StudentInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -57,9 +58,8 @@ public class AdminInfoController {
 
     @RequestMapping("/showUnsolved")
     @ResponseBody
-    public String getUnsolvedCompany() {
-        List<CompanyInfo> list = adminInfoService.selectUnsolvedCompany(CompanyInfo.CHECKING);
-        return new RestResult().setCode(ResultCode.SUCCESS).setMessage("成功").setData(list).toString();
+    public String getUnsolvedCompany(int current,int size) {
+        return adminInfoService.selectUnsolvedCompany(CompanyInfo.CHECKING,current,size);
     }
 
     @RequestMapping("/showAll")
@@ -98,7 +98,8 @@ public class AdminInfoController {
             CompanyInfo companyInfo=adminInfoService.updateCompany(companyId);
             return new RestResult().setCode(ResultCode.SUCCESS).setMessage("已通过").setData(companyInfo).toString();
         }
-        return new RestResult().setCode(ResultCode.SUCCESS).setMessage("未通过").toString();
+        CompanyInfo companyInfo=adminInfoService.rejectCompany(companyId);
+        return new RestResult().setCode(ResultCode.SUCCESS).setMessage("未通过").setData(companyInfo).toString();
     }
 
     @RequestMapping("/download")
@@ -151,6 +152,16 @@ public class AdminInfoController {
                 }
         ).start();
         return new RestResult().setCode(ResultCode.SUCCESS).setMessage("添加成功").toString();
+    }
+
+    @ResponseBody
+    @RequestMapping("/company/{companyId}")
+    public String searchCompanyById(@PathVariable("companyId") String companyId){
+        CompanyInfo companyInfo=adminInfoService.searchCompany(companyId);
+        if(companyInfo!=null){
+            return new RestResult().setCode(ResultCode.SUCCESS).setData(companyInfo).toString();
+        }
+        return new RestResult().setCode(ResultCode.FAIL).toString();
     }
 }
 

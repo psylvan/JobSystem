@@ -7,24 +7,58 @@
 <body>
 <input type="file" id="fileSelector" value="选择"/>
 <button type="button" id="go" onclick="upload()">上传</button>
+
+<div id="area" style="border:red 1px;background-color:red;width: 300px;height: 300px;">将图片拖拽到此区域</div>
+<div id="preview"></div>
+
+
 </body>
 <script type="text/javascript" src="../static/js/xlsx.core.min.js"></script>
 <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
 <script>
-    function readWorkbookFromLocalFile(file, callback) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var data = e.target.result;
-            var workbook = XLSX.read(data, {type: 'binary'});
-            if(callback) callback(workbook);
-        };
-        reader.readAsBinaryString(file);
-    }
+    $(document).on({
+        dragleave:function(e){      //拖离
+            e.preventDefault();
+        },
+        drop:function(e){           //拖后放
+            e.preventDefault();
+        },
+        dragenter:function(e){      //拖进
+            e.preventDefault();
+        },
+        dragover:function(e){       //拖来拖去
+            e.preventDefault();
+        }
+    });
+
+    var box = document.getElementById('area'); //拖拽区域
+    var fileList;
+    box.addEventListener("drop",
+        function(e) {
+            e.preventDefault(); //取消默认浏览器拖拽效果
+            fileList = e.dataTransfer.files; //获取文件对象
+            //检测是否是拖拽文件到页面的操作
+            if (fileList.length == 0) {
+                return false;
+            }
+        },
+        false);
+
     function upload(){
-        var files = $('#fileSelector')[0].files;
+        var files = fileList;
         if(files.length){
+            console.log(files);
             var file = files[0];
-            readWorkbookFromLocalFile(file,callback)
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var data = e.target.result;
+                var workbook = XLSX.read(data, {type: 'binary'});
+                if(callback) callback(workbook);
+            };
+            reader.readAsBinaryString(file);
+        }
+        else{
+            alert('请选择文件');
         }
     }
     function callback(workbook) {
@@ -44,6 +78,7 @@
             stu.hometown = sheet['F'+''+i].w;
             list.push(stu)
         }
+        console.log(list);
         $.ajax({
             url: 'uploadStudent',
             type: 'POST',
