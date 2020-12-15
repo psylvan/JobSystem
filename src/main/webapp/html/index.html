@@ -5,8 +5,8 @@
 <meta charset="utf-8">
 
 <title>就业系统</title>
-<link rel="stylesheet" href="static/css/style.css">
-
+<link rel="stylesheet" href="../static/css/style.css">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
 </head>
 
 <body>
@@ -16,24 +16,20 @@
     <div class="content">
         <div class="form sign-in aa"id="bus_log">
             <form action="change()" autocomplete="off">
-               
                 <h2>企业用户登录</h2>
-                
                 <label>
                     <span>账号</span>
-                    <input type="text" name="name_log" id="na_log" /><span></span>
+                    <input type="text" name="name_log" id="comId" /><span></span>
                 </label>
                 <label>
                     <span>密码</span>
-                    <input type="password" name="pwd_log" id="pwd_log" ><span></span>
+                    <input type="password" name="pwd_log" id="comPassword" ><span></span>
                 </label>
-                <label>
-                    <span>验证码(点击刷新)</span>
-                    <input type="submit" id="code" onClick="change();"style="border:none;margin-bottom:25px">
-                    <input type="text" class="code" placeholder="请输入验证码">
-                   
-                    
-                </label>
+<!--                <label>-->
+<!--                    <span>验证码(点击刷新)</span>-->
+<!--                    <input type="submit" id="code" onClick="change();"style="border:none;margin-bottom:25px">-->
+<!--                    <input type="text" class="code" placeholder="请输入验证码">-->
+<!--                </label>-->
                 <p class="forgot-pass"><a href="javascript:">忘记密码？</a></p>
                 <button type="button" class="submit" onclick="buslogin()">登 录</button>
                 <button type="button" class="fb-btn" onclick="log_stu()">使用 <span>学生</span> 帐号登录</button>
@@ -45,21 +41,19 @@
 
             <label>
                 <span>账号</span>
-                <input type="text" name="name_log" id="na_log" /><span></span>
+                <input type="text" name="name_log" id="stuId" /><span></span>
             </label>
             <label>
                 <span>密码</span>
-                <input type="password" name="pwd_log" id="pwd_log" ><span></span>
+                <input type="password" name="pwd_log" id="stuPassword" ><span></span>
             </label>
-            <label>
-                <span>验证码(点击刷新)</span>
-                <input type="button" id="code1" onClick="change1();"style="border:none;margin-bottom:25px">
-                <input type="text" class="code" placeholder="请输入验证码">
-               
-               
-            </label>
+<!--            <label>-->
+<!--                <span>验证码(点击刷新)</span>-->
+<!--                <input type="button" id="code1" onClick="change1();"style="border:none;margin-bottom:25px">-->
+<!--                <input type="text" class="code" placeholder="请输入验证码">-->
+<!--            </label>-->
             <p class="forgot-pass"><a href="javascript:">忘记密码？</a></p>
-            <button type="button" class="submit"onclick="stulogin()">登 录</button>
+            <button type="button" class="submit" onclick="stulogin()">登 录</button>
             <button type="button" class="fb-btn"onclick="log_bus()">使用 <span>企业合作</span> 帐号登录</button>
         </form>
         </div>
@@ -93,19 +87,19 @@
                     <span style="color: #000000; ">确认密码</span>
                     <input type="password" name="pwd_reg" id="pwd_reg" /><img src="" style="height: 14px;width: 14px;"><span id="pwdtip"> 请再次填写密码</span>
                 </label>
-                <label>
-                    <div class="verify">
-                     <div id="verify_box">
-                        <div id="verify_xbox">
-                            <div id="btn2">
-                                <img class="img1"style=" height: 12px; top: 0;" src="static/images/slidebar.png"/>
-                            </div>
-                        </div>
-                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;按住滑块，拖动到最右边
-                     </div>
-                    </div>
-                    <h6>请滑动上方滑块验证</h6>
-                </label>
+<!--                <label>-->
+<!--                    <div class="verify">-->
+<!--                     <div id="verify_box">-->
+<!--                        <div id="verify_xbox">-->
+<!--                            <div id="btn2">-->
+<!--                                <img class="img1"style=" height: 12px; top: 0;" src="images/lllllll.png"/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;按住滑块，拖动到最右边-->
+<!--                     </div>-->
+<!--                    </div>-->
+<!--                    <h6>请滑动上方滑块验证</h6>-->
+<!--                </label>-->
                 <button type="button" class="submit">注 册</button>
                
             </form>
@@ -114,7 +108,7 @@
     </div>
     <a href="adminlogin.html" class="myButton">管理员登录</a>
 </body>
-<script src="static/js/script.js"></script>
+<script src="../static/js/script.js"></script>
 <script>
     function log_stu(){
         document.getElementById("bus_log").style="display:none";
@@ -126,16 +120,35 @@
        document.getElementById("bus_log").style="display:block";
     }
     function buslogin(){
-        document.getElementById("zhuan").style.display="block";
-        setTimeout(function(){
-            document.getElementById("zhuan").style.display="none";
-        },2000)
+        $.post('/Job/doLogin',{
+            userId: $('#comId').val(),
+            password: $('#comPassword').val(),
+            identity: 2
+        },function (response) {
+            var data = JSON.parse(response);
+            if(data.code == 200){
+                window.location.href="CompanyInfo.html";
+            }
+            else{
+                alert(data.message);
+            }
+        })
     }
     function stulogin(){
-        document.getElementById("zhuan").style.display="block";
-        setTimeout(function(){
-            document.getElementById("zhuan").style.display="none";
-        },2000)
+        $.post('/Job/doLogin',{
+            userId: $('#stuId').val(),
+            password: $('#stuPassword').val(),
+            identity: 1
+        },function (response) {
+            var data = JSON.parse(response);
+            if(data.code == 200){
+                window.location.href="studentInfo.html";
+            }
+            else{
+                alert(data.message);
+            }
+        })
     }
+
 </script>
 </html>

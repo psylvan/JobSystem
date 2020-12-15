@@ -34,7 +34,7 @@ public class JobInfoController {
         JobInfo job=new JobInfo();
         String companyId=(String)session.getAttribute("user");
         job.setCompanyId(companyId);
-        String jobName=(String)request.getParameter("companyId");
+        String jobName=(String)request.getParameter("jobName");
         job.setJobName(jobName);
         String jobType=(String)request.getParameter("jobType");
         job.setJobType(jobType);
