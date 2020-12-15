@@ -38,7 +38,7 @@
             <el-aside width="20%">
                 <el-container>
                     <el-main>
-                        <el-menu default-active="2"  background-color="#011e2c"
+                        <el-menu default-active="3"  background-color="#011e2c"
                                  text-color="#fff" active-text-color="#ffd04b">
                             <el-menu-item index="1" @click="gotoCompanyInfo">
                                 <i class="el-icon-user-solid"></i>
@@ -60,42 +60,23 @@
                 </el-container>
             </el-aside>
             <el-main>
-                <!-- Form -->
-                <el-button type="success" @click="dialogFormVisible = true">添加岗位</el-button>
-
-                <el-dialog title="岗位信息" :visible.sync="dialogFormVisible">
-                    <el-form :model="form">
-                        <el-form-item label="岗位名称" :label-width="formLabelWidth">
-                            <el-input v-model="form.jobName" autocomplete="off"></el-input>
-                        </el-form-item>
-                        <el-form-item label="岗位描述" :label-width="formLabelWidth">
-                            <el-input v-model="form.jobDescription" autocomplete="off"></el-input>
-                        </el-form-item>
-                        <el-form-item label="岗位类型" :label-width="formLabelWidth">
-                            <el-select v-model="form.jobType" placeholder="岗位类型">
-                                <el-option label="后端开发" value="后端开发"></el-option>
-                                <el-option label="前端开发" value="前端开发"></el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-form>
-                    <div slot="footer" class="dialog-footer">
-                        <el-button @click="dialogFormVisible = false">取 消</el-button>
-                        <el-button type="primary" @click="submitJob">确 定</el-button>
-                    </div>
-                </el-dialog>
-
-                <hr>
                 <el-table :data="tableData">
                     <el-table-column prop="jobName" label="岗位名称" width="180">
                     </el-table-column>
                     <el-table-column prop="jobType" label="岗位类型" width="180">
                     </el-table-column>
-                    <el-table-column prop="jobDescription" label="岗位描述" width="180">
+                    <el-table-column prop="resumeName" label="简历名称" width="180">
+                    </el-table-column>
+                    <el-table-column prop="studentName" label="学生名称" width="180">
+                    </el-table-column>
+                    <el-table-column prop="time" label="投递时间" width="180">
+                    </el-table-column>
+                    <el-table-column prop="deliverStatus" label="状态" width="180">
                     </el-table-column>
                     <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
-                            <el-button @click="deleteJob(scope.$index)" type="text" size="small">删除</el-button>
-                            <el-button type="text" size="small">编辑</el-button>
+                            <el-button @click="deleteJob(scope.$index)" v-bind:disabled="disabled" type="text" size="small">录用</el-button>
+                            <el-button @click="deleteJob(scope.$index)" v-bind:disabled="disabled" type="text" size="small">拒用</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -122,85 +103,56 @@
     var app = new Vue({
         el: '#app',
         data: {
-            tableData: [],
+            tableData: [
+                {
+                    jobName: 'java',
+                    jobType: '后端开发',
+                    resumeName: 'dsj的Java简历',
+                    studentName: 'dsj',
+                    time: new Date(),
+                    deliverStatus: '已投递'
+                }
+            ],
+            disabled: false,
             current: 0,
             size: 5,
             total: 0,
-            dialogFormVisible: false,
-            form: {
-                jobName: '',
-                jobDescription: '',
-                jobType: '',
-            },
-            formLabelWidth: '120px'
         },
-        methods: {
+        methods:{
             initfun: function () {
                 var that = this;
                 var params = new URLSearchParams();
-                params.append('current', that.current);
-                params.append('size',that.size);
-                axios.post("/Job/getMyJobs",params)
-                    .then(function (reponse) {
-                    var data = JSON.parse(reponse.data).data;
-                    console.log(data);
-                    that.tableData = data;
-                    if(data.length>0){
-                        that.total = data[0].total;
+                params.append('current',this.current);
+                params.append('size',this.size);
+                axios.post("/Job/getDeliverRecord",params).then(response=>{
+                    var data = JSON.parse(response.data).data;
+                    for(var i=0;i<data.length;i++){
+                        if(data.deliverStatus == '0'){
+                            data.deliverStatus = '已投递';
+                        }
+                        if(data.deliverStatus == '-1'){
+                            data.deliverStatus = '拒用';
+                        }
+                        if(data.deliverStatus == '1'){
+                            data.deliverStatus = '录用';
+                        }
                     }
-                },function (err) {
-
-                });
+                    that.tableData = data;
+                })
             },
             currentChange: function (val) {
                 var that = this;
                 that.current = val;
                 var params = new URLSearchParams();
                 params.append('current', that.current);
-                params.append('size',that.size);
                 axios.post("/Job/getMyJobs",params)
                     .then(function (reponse) {
-                        var data = JSON.parse(reponse.data).data;
-                        console.log(data);
-                        that.tableData = data;
-                    },function (err) {
 
-                    }
-                );
-            } ,
-            submitJob: function () {
-                var that = this;
-                var params = new URLSearchParams();
-                params.append('jobName', that.form.jobName);
-                params.append('jobType', that.form.jobType);
-                params.append('jobDescription', that.form.jobDescription);
-                that.tableData.push({'jobName':that.form.jobName,'jobType':that.form.jobType,'jobDescription':that.form.jobDescription});
-                this.dialogFormVisible = false;
-                axios.post("/Job/addJob", params)
-                    .then(function (reponse) {
-                        var data = JSON.parse(reponse.data).data;
-                        console.log(data);
-                    }, function (err) {
-
-                    }
-                );
-            },
-            deleteJob: function (index) {
-                var jobId = this.tableData[index].jobId;
-                this.tableData.splice(index,1);
-                var that = this;
-                var params = new URLSearchParams();
-                params.append('jobId', jobId);
-                axios.post("/Job/removeJob", params)
-                    .then(function (reponse) {
-                            var data = JSON.parse(reponse.data).data;
-                            console.log(data);
-                        }, function (err) {
+                        },function (err) {
 
                         }
                     );
-
-            },
+            } ,
             gotoCompanyInfo: function () {
                 window.location.href='CompanyInfo.html';
             },
@@ -209,7 +161,7 @@
             },
             gotoCompanyDeliver: function (){
                 window.location.href='CompanyDeliver.html'
-            },
+            }
         },
         mounted(){
             this.initfun();

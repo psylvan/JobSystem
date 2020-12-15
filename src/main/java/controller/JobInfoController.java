@@ -33,7 +33,6 @@ public class JobInfoController {
     public String addJob(HttpSession session, HttpServletRequest request){
         JobInfo job=new JobInfo();
         String companyId=(String)session.getAttribute("user");
-//        String companyId="123";
         job.setCompanyId(companyId);
         String jobName=(String)request.getParameter("jobName");
         job.setJobName(jobName);

@@ -93,12 +93,12 @@ public class StudentInfoController {
         String studentId = (String) request.getSession().getAttribute("user");
 //        String studentId = "2220172361";
         //String resumeName = (String) request.getParameter("resumeName");
-        String resumeName = "myResume.pdf";
+        String resumeName = "myResume";
         //传输简历pdf文件
+        //设置文件存储路径
+        String storagePath = request.getRealPath("/uploads");
         //判断文件是否为空
         if(!file.isEmpty()){
-            //设置文件存储路径
-            String storagePath = "D:\\ResumesUpload";
             try{
                 file.transferTo(new File(storagePath+ File.separator+resumeName));//把文件写入目标文件地址
             }catch (Exception e){
@@ -111,6 +111,7 @@ public class StudentInfoController {
         resumeInfo.setResumeName(resumeName);
         resumeInfo.setResumeStatus(0);//unknow
         resumeInfo.setStudentId(studentId);
+        resumeInfo.setUrl(storagePath+"/"+resumeName+".pdf");
         resumeInfoService.save(resumeInfo);
         return new RestResult().setCode(ResultCode.SUCCESS).toString();
     }
@@ -162,8 +163,8 @@ public class StudentInfoController {
     @RequestMapping("/getRecord")
     @ResponseBody
     public String getDeliverRecord(HttpSession session){
-        String studentId = (String) session.getAttribute("user");
-//        String studentId = "2220172361";
+//        String studentId = (String) session.getAttribute("user");
+        String studentId = "2220172361";
         int current = 1;
         int size = 20;
         IPage<DeliverRecordInfo> deliverRecordInfoIPage = new Page<>(current,size);
@@ -183,6 +184,17 @@ public class StudentInfoController {
     @ResponseBody
     public String commit(String deliverId,boolean flag){
         return deliverRecordInfoService.commitOffer(deliverId,flag);
+    }
+
+    @RequestMapping("/deliverResume")
+    @ResponseBody
+    public String deliver(String resumeId,String jobId){
+        DeliverRecordInfo info = new DeliverRecordInfo();
+        info.setJobId(jobId);
+        info.setResumeId(resumeId);
+        info.setStatus(DeliverRecordInfo.DELIVERED);
+        deliverRecordInfoService.save(info);
+        return new RestResult().setCode(ResultCode.SUCCESS).setMessage("投递成功").toString();
     }
 }
 

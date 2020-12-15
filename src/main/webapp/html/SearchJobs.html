@@ -55,7 +55,7 @@
                                     <i class="el-icon-search"></i>
                                     <span slot="title">职位查询</span>
                                 </el-menu-item>
-                                <el-menu-item index="4" >
+                                <el-menu-item index="4" @click="gotoDeliveryRecord">
                                     <i class="el-icon-stopwatch"></i>
                                     <span slot="title">投递记录</span>
                                 </el-menu-item>
@@ -103,7 +103,32 @@
                             </el-table-column>
                             <el-table-column prop="jobType" label="职位类型">
                             </el-table-column>
+                            <el-table-column label="操作">
+                                <template slot-scope="scope">
+                                    <el-button size="mini" @click="handleLearnMore(scope.$index, scope.row)">了解详情</el-button>
+                                    <el-button size="mini" @click="dialogVisible = true">投递简历</el-button>
+                                </template>
+                            </el-table-column>
                         </el-table>
+                        <el-pagination
+                                layout="prev, pager, next"
+                                :total="50">
+                        </el-pagination>
+                    </div>
+                    <div>
+                        <el-dialog
+                                title="请选择你想投递的简历"
+                                :visible.sync="dialogVisible"
+                                width="30%"
+                                center>
+                            <span v-for="resume in resumes">
+                                <el-radio v-model="resumeRadio" :label="resume.resumeId" border>{{resume.resumeName}}</el-radio>
+                            </span>
+                            <span slot="footer" class="dialog-footer">
+                                <el-button @click="dialogVisible = false">取消</el-button>
+                                <el-button type="primary" @click="handleDelivery(scope.$index, scope.row)">确定</el-button>
+                            </span>
+                        </el-dialog>
                     </div>
                 </el-main>
             </el-container>
@@ -137,28 +162,15 @@
                 value: '运营',
                 label: '运营'
             }],
-            tableData: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄',
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄',
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }]
+            tableData: [],
+            dialogVisible: false,
+            resumes:[],
+            resumeRadio:''
         },
         methods: {
             initfn: function(){
                 var that = this;
-                axios.get('http://localhost:8080/Job/getMyInfo').then(function(response){
+                axios.get('../getMyInfo').then(function(response){
                     var data = JSON.parse(response.data).data;
                     console.log(data);
                     that.studentId = data.studentId;
@@ -166,7 +178,7 @@
                 },function(err){
 
                 });
-                axios.post('http://localhost:8080/Job/getJobs',{
+                axios.post('../getJobs',{
                     jobName: that.jobName,
                     jobType: that.jobType,
                     companyName: that.companyName
@@ -174,16 +186,28 @@
                     var data = JSON.parse(response.data).data;
                     console.log(data);
                     that.tableData = data;
+                },function (err){
+
+                });
+                axios.get('../getMyResumes').then(function (response){
+                    var data = JSON.parse(response.data).data;
+                    data.forEach(function (item){
+                        item.createTime = new Date(item.createTime).toLocaleDateString();
+                    });
+                    that.resumes = data;
                 },function (err){
 
                 })
             },
             gotoResumesManagement: function (){
-              window.location.href = 'http://localhost:8080/Job/html/ResumeManagement.html';
+              window.location.href = 'ResumeManagement.html';
+            },
+            gotoDeliveryRecord: function (){
+                window.location.href = 'DeliveryRecord.html'
             },
             searchJobs: function (){
                 var that = this;
-                axios.post('http://localhost:8080/Job/getJobs',{
+                axios.post('../getJobs',{
                     jobName: that.jobName,
                     jobType: that.jobType,
                     companyName: that.companyName
@@ -194,9 +218,15 @@
                 },function (err){
 
                 })
+            },
+            handleDelivery: function (index, row){
+                console.log(index, row);
+            },
+            handleLearnMore: function (index, row){
+                console.log(index, row);
             }
         },
-        mounted(){
+        created(){
             this.initfn();
         }
     })

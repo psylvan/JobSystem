@@ -34,7 +34,10 @@
         where d.job_id = j.job_id and j.company_id = c.company_id
         and c.company_id = #{cid}
         and d.resume_id = r.resume_id and r.student_id = s.student_id
-        and s.student_name = #{sname}
+        <if test="sname != null">
+            and s.student_name = #{sname}
+        </if>
+
     </select>
     <resultMap id="selectDR" type="pojo.DeliverRecordInfo" >
         <id property="deliverId" column="deliver_id"/>
