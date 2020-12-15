@@ -56,7 +56,18 @@
                 </el-container>
             </el-aside>
             <el-main>
-
+                <el-upload
+                        class="upload-demo"
+                        drag
+                        action=""
+                        :auto-upload="false"
+                        :file-list="fileList"
+                        >
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将文件拖到此处</em></div>
+                    <div class="el-upload__tip" slot="tip"></div>
+                </el-upload>
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
             </el-main>
         </el-container>
     </el-container>
@@ -78,7 +89,8 @@
             operate:"",
             tableData:[],
             companyData:[],
-            flag:""
+            flag:"",
+            fileList:[],
         },
         methods:{
             initfn:function () {
@@ -106,7 +118,9 @@
                     // window.location.href="/Job/company/"+companyId+"/false";
                 });
             },
-
+            submitUpload: function(){
+                console.log(this.fileList);
+            },
             companyInfo:function (index) {
                 var that=this;
                 var companyId=this.tableData[index].companyId;
