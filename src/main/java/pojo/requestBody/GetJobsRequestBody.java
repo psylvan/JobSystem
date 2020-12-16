@@ -7,4 +7,6 @@ public class GetJobsRequestBody {
     String jobName;
     String companyName;
     String jobType;
+    int current;
+    int size;
 }

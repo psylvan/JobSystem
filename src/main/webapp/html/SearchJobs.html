@@ -115,7 +115,10 @@
                         </el-table>
                         <el-pagination
                                 layout="prev, pager, next"
-                                :total="50">
+                                :total="paginationTotal"
+                                :current-page="paginationCurrent"
+                                :hide-on-single-page="true"
+                                @current-change="handlePageChange">
                         </el-pagination>
                     </div>
                     <div>
@@ -166,6 +169,8 @@
                 label: '运营'
             }],
             tableData: [],
+            paginationTotal: 0,
+            paginationCurrent:1,
             dialogVisible: false,
             resumes:[],
             resumeRadio:'',
@@ -185,11 +190,14 @@
                 axios.post('../getJobs',{
                     jobName: that.jobName,
                     jobType: that.jobType,
-                    companyName: that.companyName
+                    companyName: that.companyName,
+                    current: that.paginationCurrent,
+                    size: 10
                 }).then(function (response){
                     var data = JSON.parse(response.data).data;
                     console.log(data);
                     that.tableData = data;
+                    that.paginationTotal = JSON.parse(response.data).message;
                 },function (err){
 
                 });
@@ -209,7 +217,25 @@
                 axios.post('../getJobs',{
                     jobName: that.jobName,
                     jobType: that.jobType,
-                    companyName: that.companyName
+                    companyName: that.companyName,
+                    current: that.paginationCurrent,
+                    size: 10
+                }).then(function (response){
+                    var data = JSON.parse(response.data).data;
+                    console.log(data);
+                    that.tableData = data;
+                },function (err){
+
+                })
+            },
+            handlePageChange: function (){
+                var that = this;
+                axios.post('../getJobs',{
+                    jobName: that.jobName,
+                    jobType: that.jobType,
+                    companyName: that.companyName,
+                    current: that.paginationCurrent,
+                    size: 10
                 }).then(function (response){
                     var data = JSON.parse(response.data).data;
                     console.log(data);
