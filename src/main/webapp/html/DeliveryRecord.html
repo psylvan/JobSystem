@@ -95,7 +95,7 @@
                         </el-table-column>
                         <el-table-column prop="" label="操作">
                             <template slot-scope="scopeProp">
-                                <el-button type="primary" size="mini" v-if="scopeProp.row.status==1" @click="handleAcceptOffer(scopeProp.row)">接受offer</el-button>
+                                <el-button type="primary" size="mini" v-if="scopeProp.row.status==1 && hasAcceptedOffer==false" @click="handleAcceptOffer(scopeProp.row)">接受offer</el-button>
                                 <el-button type="primary" size="mini" disabled v-else>接受offer</el-button>
                                 <el-button size="mini" v-if="scopeProp.row.status==1" @click="handleRefuseOffer(scopeProp.row)">拒绝offer</el-button>
                                 <el-button size="mini" disabled v-else>拒绝offer</el-button>
@@ -120,7 +120,8 @@
         data: {
             studentId: '',
             studentName: '',
-            tableData: []
+            tableData: [],
+            hasAcceptedOffer: false
         },
         methods: {
             initfn: function (){
@@ -139,6 +140,9 @@
                         console.log(item);
                         console.log(item.createTime);
                         item.createTime = new Date(item.createTime).toLocaleDateString();
+                        if(item.status == 2){
+                            that.hasAcceptedOffer = true;
+                        }
                     });
                     that.tableData = data;
                     console.log(data);

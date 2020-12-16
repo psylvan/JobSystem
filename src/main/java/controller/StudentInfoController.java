@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.HtmlUtils;
 import pojo.DeliverRecordInfo;
 import pojo.JobInfo;
 import pojo.ResumeInfo;
@@ -157,6 +158,12 @@ public class StudentInfoController {
         //执行查询
         jobInfoIPage = (Page<JobInfo>) jobInfoService.listJobsWithCompanyName(jobInfoIPage, wrapper);
         List<JobInfo> jobInfos = jobInfoIPage.getRecords();
+        //逆转义富文本html标签
+        Iterator<JobInfo> jobInfoIterator = jobInfos.iterator();
+        while(jobInfoIterator.hasNext()){
+            JobInfo jobInfo = jobInfoIterator.next();
+            jobInfo.setJobDescription(HtmlUtils.htmlUnescape(jobInfo.getJobDescription()));
+        }
         long total = jobInfoIPage.getTotal();
         //返回结果
         return new RestResult()

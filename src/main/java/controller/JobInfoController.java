@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.HtmlUtils;
 import pojo.JobInfo;
 import service.JobInfoService;
 import util.json.RestResult;
@@ -39,7 +40,12 @@ public class JobInfoController {
         String jobType=(String)request.getParameter("jobType");
         job.setJobType(jobType);
         String jobDescription=(String)request.getParameter("jobDescription");
-        job.setJobDescription(jobDescription);
+        System.out.println(jobDescription);
+        //转义HTML标签
+        String processedJobDescription = HtmlUtils.htmlEscape(jobDescription);
+        System.out.println(processedJobDescription);
+        job.setJobDescription(processedJobDescription);
+        //job.setJobDescription(jobDescription);
         boolean flag=jobInfoService.insertJob(job);
         if(flag){
             return new RestResult().setCode(ResultCode.SUCCESS).setMessage("新增职位成功").setData(job).toString();

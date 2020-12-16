@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <!-- 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.zhimg.com/element-ui@2.14.1/lib/theme-chalk/index.css">
+    <!-- 富文本编辑器quill样式-->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/quill/1.3.7/quill.snow.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/quill/1.3.7/quill.bubble.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/quill/1.3.7/quill.core.css">
     <title>就业管理系统-简历维护</title>
     <style>
         html,body{
@@ -25,6 +29,10 @@
         }
         .el-menu{
             border: 0;
+        }
+        #editor{
+            height: 300px;
+            overflow: auto;
         }
         [v-clock]{
             display: none;
@@ -72,7 +80,7 @@
                             <el-input v-model="form.jobName" autocomplete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="岗位描述" :label-width="formLabelWidth">
-                            <el-input v-model="form.jobDescription" autocomplete="off"></el-input>
+                            <quill-editor @lose-focus="getContent"></quill-editor>
                         </el-form-item>
                         <el-form-item label="岗位类型" :label-width="formLabelWidth">
                             <el-select v-model="form.jobType" placeholder="岗位类型">
@@ -117,15 +125,68 @@
         </el-container>
     </el-container>
 </div>
+<template id="editorTemplate">
+    <div>
+        <div id="editor" @mouseleave="postContent">
+            <p></p>
+        </div>
+    </div>
+</template>
 <!-- Vue -->
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <!-- 引入Element组件库 -->
 <script src="https://unpkg.zhimg.com/element-ui/lib/index.js"></script>
 <!-- 引入axios -->
 <script src="https://unpkg.zhimg.com/axios/dist/axios.min.js"></script>
+<!-- quill -->
+<script src="https://cdn.bootcdn.net/ajax/libs/quill/1.3.7/quill.js"></script>
+
 <script>
+    var vueQuill = {
+        template: '#editorTemplate',
+        data: function (){
+            return {
+                content:''
+            }
+        },
+        methods:{
+            postContent: function (){
+                console.log(document.getElementById('editor').children[0].innerHTML);
+                this.$emit('lose-focus',document.getElementById('editor').children[0].innerHTML);
+            }
+        },
+        mounted(){
+            var editor = new Quill('#editor', {
+                modules: {
+                    toolbar: [
+                        ['bold','italic', 'underline', 'strike'],        // toggled buttons
+                        ['blockquote', 'code-block'],
+
+                        [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+                        [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+                        [{ 'direction': 'rtl' }],                         // text direction
+
+                        [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+                        [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+                        [{ 'font': [] }],
+                        [{ 'align': [] }],
+
+                        ['clean']                                         // remove formatting button
+                    ]
+                },
+                theme: 'snow'
+            });
+        }
+    }
     var app = new Vue({
         el: '#app',
+        components: {
+            'quill-editor': vueQuill
+        },
         data: {
             tableData: [],
             current: 0,
@@ -137,7 +198,8 @@
                 jobDescription: '',
                 jobType: '',
             },
-            formLabelWidth: '120px'
+            formLabelWidth: '120px',
+            editorData:''
         },
         methods: {
             initfun: function () {
@@ -173,13 +235,17 @@
                     }
                 );
             } ,
+            getContent: function (data){
+                 console.log('getContent:data='+data);
+                 this.editorData = data;
+            },
             submitJob: function () {
                 var that = this;
                 var params = new URLSearchParams();
                 params.append('jobName', that.form.jobName);
                 params.append('jobType', that.form.jobType);
-                params.append('jobDescription', that.form.jobDescription);
-                that.tableData.push({'jobName':that.form.jobName,'jobType':that.form.jobType,'jobDescription':that.form.jobDescription});
+                params.append('jobDescription', that.editorData);
+                //that.tableData.push({'jobName':that.form.jobName,'jobType':that.form.jobType,'jobDescription':that.form.jobDescription});
                 this.dialogFormVisible = false;
                 axios.post("/Job/addJob", params)
                     .then(function (reponse) {
@@ -220,6 +286,10 @@
             this.initfun();
         }
     })
+    var editor = new Quill('#editor', {
+        modules: { toolbar: '#toolbar' },
+        theme: 'snow'
+    });
 </script>
 </body>
 </html>
