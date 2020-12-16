@@ -60,8 +60,7 @@ public class StudentInfoController {
     @RequestMapping("/getMyInfo")//请求路径（ajax接口）
     @ResponseBody
     public String getStudentInfo(HttpSession session){
-        //String studentId = (String) session.getAttribute("user");
-        String studentId = "2220172361";
+        String studentId = (String) session.getAttribute("user");
         StudentInfo student = studentInfoService.getById(studentId);
         return new RestResult()
                 .setCode(ResultCode.SUCCESS)
@@ -72,8 +71,7 @@ public class StudentInfoController {
     @RequestMapping("/getMyResumes")
     @ResponseBody
     public String getStudentResumes(HttpSession session){
-//        String studentId = (String) session.getAttribute("user");
-        String studentId = "2220172361";
+        String studentId = (String) session.getAttribute("user");
         //存放查询结果的list
         List<ResumeInfo> resumeInfos;
         //设置查询条件的wrapper
@@ -90,8 +88,7 @@ public class StudentInfoController {
     @RequestMapping("/uploadResume")
     @ResponseBody
     public String uploadResume(@RequestParam("file") MultipartFile file, HttpServletRequest request){
-//        String studentId = (String) request.getSession().getAttribute("user");
-        String studentId = "2220172361";
+        String studentId = (String) request.getSession().getAttribute("user");
         String resumeName = file.getOriginalFilename();
         //传输简历pdf文件
         //设置文件存储路径
@@ -124,7 +121,6 @@ public class StudentInfoController {
     @ResponseBody
     public String deleteResume(HttpSession session, @RequestBody(required = true)Map<String,Object> map){
         String studentId = (String) session.getAttribute("user");
-//        String studentId = "2220172361";
         String resumeId = (String) map.get("resumeId");
         ResumeInfo resumeInfo = resumeInfoService.getById(resumeId);
         resumeInfo.setResumeStatus(-1);
@@ -135,7 +131,6 @@ public class StudentInfoController {
     @ResponseBody
     public String getJobs(HttpSession session, @RequestBody GetJobsRequestBody getJobsRequestBody){
         String studentId = (String) session.getAttribute("user");
-//        String studentId = "2220172361";
         String companyName = getJobsRequestBody.getCompanyName();
         String jobName = getJobsRequestBody.getJobName();
         String jobType = getJobsRequestBody.getJobType();
@@ -168,8 +163,7 @@ public class StudentInfoController {
     @RequestMapping("/getRecord")
     @ResponseBody
     public String getDeliverRecord(HttpSession session){
-//        String studentId = (String) session.getAttribute("user");
-        String studentId = "2220172361";
+        String studentId = (String) session.getAttribute("user");
         int current = 1;
         int size = 20;
         IPage<DeliverRecordInfo> deliverRecordInfoIPage = new Page<>(current,size);

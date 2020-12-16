@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <!-- 引入样式 -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.14.1/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://unpkg.zhimg.com/element-ui@2.14.1/lib/theme-chalk/index.css">
     <title>就业管理系统-简历维护</title>
     <style>
         html,body{
@@ -103,9 +103,9 @@
 <!-- Vue -->
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <!-- 引入Element组件库 -->
-<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.zhimg.com/element-ui/lib/index.js"></script>
 <!-- 引入axios -->
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.zhimg.com/axios/dist/axios.min.js"></script>
 <script>
     var app = new Vue({
         el: '#app',
@@ -146,6 +146,12 @@
                         if(data[i].deliverStatus == 1){
                             data[i].deliverStatus = '录用';
                         }
+                        if(data[i].deliverStatus == 2){
+                            data[i].deliverStatus = '已接受offer';
+                        }
+                        if(data[i].deliverStatus == -2){
+                            data[i].deliverStatus = '已拒绝offer';
+                        }
                     }
                     if(data.length>0){
                         that.total = data[0].total;
@@ -174,7 +180,12 @@
                             if(data[i].deliverStatus == 1){
                                 data[i].deliverStatus = '录用';
                             }
-
+                            if(data[i].deliverStatus == 2){
+                                data[i].deliverStatus = '已接受offer';
+                            }
+                            if(data[i].deliverStatus == -2){
+                                data[i].deliverStatus = '已拒绝offer';
+                            }
                         }
 
                         that.tableData = data;
@@ -204,9 +215,10 @@
                 )
             },
             watchResume: function (row,col,event){
-                console.log(row);
+                if(col.id == "el-table_1_column_6") return ;
+                console.log(col);
                 var e = row.url;
-                window.location.href=e;
+                window.open(e, '_blank').location;
             },
             gotoCompanyInfo: function () {
                 window.location.href='CompanyInfo.html';

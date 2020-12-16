@@ -6,7 +6,7 @@
     <title>就业管理系统-查找职位</title>
 
     <!-- 引入样式 -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.14.1/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://unpkg.zhimg.com/element-ui@2.14.1/lib/theme-chalk/index.css">
     <style>
         html,body{
             height: 100%;
@@ -46,7 +46,7 @@
                         <el-main>
                             <el-menu default-active="3"  background-color="#011e2c"
                                      text-color="#fff" active-text-color="#ffd04b">
-                                <el-menu-item index="1">
+                                <el-menu-item index="1" @click="gotoStudentProfile">
                                     <i class="el-icon-user-solid"></i>
                                     <span slot="title">个人信息</span>
                                 </el-menu-item>
@@ -140,9 +140,9 @@
 <!-- Vue -->
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <!-- 引入Element组件库 -->
-<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.zhimg.com/element-ui/lib/index.js"></script>
 <!-- 引入axios -->
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.zhimg.com/axios/dist/axios.min.js"></script>
 <script>
     var appStyleSheet = new Vue({
         el: '#app',
@@ -204,12 +204,6 @@
 
                 })
             },
-            gotoResumesManagement: function (){
-              window.location.href = 'ResumeManagement.html';
-            },
-            gotoDeliveryRecord: function (){
-                window.location.href = 'DeliveryRecord.html'
-            },
             searchJobs: function (){
                 var that = this;
                 axios.post('../getJobs',{
@@ -235,7 +229,20 @@
             },
             handleLearnMore: function (row){
                 console.log(row);
-            }
+            },
+            gotoStudentProfile: function (){
+                window.location.href = 'StudentProfile.html'
+            },
+            gotoResumesManagement: function (){
+                window.location.href = 'ResumeManagement.html';
+            },
+            gotoSearchJobs: function (){
+                window.location.href = 'SearchJobs.html';
+            },
+            gotoDeliveryRecord: function (){
+                window.location.href = 'DeliveryRecord.html'
+            },
+
         },
         created(){
             this.initfn();
