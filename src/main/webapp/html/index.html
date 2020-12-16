@@ -178,7 +178,8 @@
         },function (response) {
             var data = JSON.parse(response);
             if(data.code == 200){
-                window.location.href="CompanyInfo.html";
+                alert('注册成功，等待审核');
+                window.location.href="index.html";
             }
             else{
                 alert(data.message);
