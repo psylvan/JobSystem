@@ -138,8 +138,10 @@ public class StudentInfoController {
         System.out.println(jobName);
         System.out.println(jobType);
         //设置分页器
-        int current = 1;
-        int size = 20;
+        int current = getJobsRequestBody.getCurrent();
+        int size = getJobsRequestBody.getSize();
+        System.out.println(current);
+        System.out.println(size);
         Page<JobInfo> jobInfoIPage = new Page<>(current,size);
         //设置查询条件
         QueryWrapper<JobInfo> wrapper = new QueryWrapper<>();
@@ -153,10 +155,13 @@ public class StudentInfoController {
             wrapper.eq("job_type",jobType);
         }
         //执行查询
-        List<JobInfo> jobInfos = jobInfoService.listJobsWithCompanyName(jobInfoIPage, wrapper).getRecords();
+        jobInfoIPage = (Page<JobInfo>) jobInfoService.listJobsWithCompanyName(jobInfoIPage, wrapper);
+        List<JobInfo> jobInfos = jobInfoIPage.getRecords();
+        long total = jobInfoIPage.getTotal();
         //返回结果
         return new RestResult()
                 .setCode(ResultCode.SUCCESS)
+                .setMessage(Long.toString(total))
                 .setData(jobInfos)
                 .toString();
     }
